@@ -1,6 +1,6 @@
 
 # NAME - COMPLIATOR - FLAGGS -LIBFT ****************************************** #
-NAME	= philo_one
+NAME	= philo_three
 OS = $(shell uname)
 CC	= gcc
 CC_L	= clang
@@ -9,7 +9,7 @@ RM	= rm -f
 #-fsanitize=address
 
 # SRCS *********************************************************************** #
-SRCS	= main.c utils.c init.c log.c \
+SRCS	= main.c \
 
 # OBJS *********************************************************************** #
 
@@ -27,9 +27,11 @@ else
 endif
 
 $(NAME):	${OBJS}
+		#	make all -C ./lib/minilibx
+		#	make all -C ./lib/libft
 
 ifeq (${OS}, Darwin)
-			$(CC) $(FLAGS) $(OBJS) -o $(NAME)
+			$(CC) $(FLAGS) $(MLX) $(OBJS) -o $(NAME)
 else
 			$(CC_L) -lpthread $(FLAGS) -o $(NAME) $(OBJS) 
 
@@ -41,9 +43,13 @@ bonus:		${OBJS} ${OBJSBONUS}
 			ar rc ${NAME} ${OBJS} ${OBJSBONUS} 
 
 clean:
+	#		make clean -C ./lib/minilibx 
+	#		make clean -C ./lib/libft
 			${RM} ${OBJS} ${OBJSBONUS}
 
 fclean:		clean
+		#	make fclean -C ./lib/libft
+		#	make fclean -C ./lib/minilibx
 			${RM} ${NAME}
 
 re:			fclean all
