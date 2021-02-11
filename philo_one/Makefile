@@ -4,7 +4,7 @@ NAME	= philo_one
 OS = $(shell uname)
 CC	= gcc
 CC_L	= clang
-CFLAGS	= -Wall -Wextra -Werror -I./includes
+CFLAGS	= -Wall -Wextra -Werror -g3 -I./includes
 RM	= rm -f
 #-fsanitize=address
 

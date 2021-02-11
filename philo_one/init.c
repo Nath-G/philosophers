@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/02/05 19:28:08 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/10 19:03:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,51 +44,37 @@ static void	init_data(t_prog_dt *data)
 
 int		init_philo(t_prog_dt *data)
 {
-	//t_philo_dt *tmp;
-//	t_fork		fork;
 	int			i;
 
 	i = 0;
-	//fork = NULL;
-	//init struct phil
 
-	printf("sizeof t_fork = %lu\n", sizeof(size_t));
-	printf("sizeof t_fork = %lu\n", sizeof(unsigned int));
-	//printf("sizeof t_fork = %lu\n", sizeof(data->philo[i].right_fork->fork));
-	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) * data->n_philo)))
+	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) * (data->n_philo))))
 		return (MALLOC_ERROR);
 	while (i < data->n_philo)
 	{
-		if (!(data->philo[i].name = malloc(sizeof(char*)+1))
-			|| !(data->philo[i].right_fork = malloc(sizeof(t_fork) * data->n_philo))
-			|| !(data->philo[i].left_fork = malloc(sizeof(t_fork) * data->n_philo)))
+		if (!(data->philo[i].name = malloc(sizeof(char) * 20))
+			|| !(data->philo[i].right_fork = (t_fork *)malloc(sizeof(t_fork) * (data->n_philo)))
+			|| !(data->philo[i].left_fork = (t_fork *)malloc(sizeof(t_fork) * (data->n_philo))))
 			return (MALLOC_ERROR);
 		i++;
 	}
-	printf("ok\n");
 	i = 0;
 	while(i < data->n_philo)
 	{
-		printf("ok1\n");
 		if (pthread_mutex_init(&data->philo[i].left_fork->fork, NULL)) //!(i = 0) && ...dans la condition
 			return (MUTEX_ERROR);
 		if (pthread_mutex_init(&data->philo[i].right_fork->fork, NULL)) //!(i = 0) && ...dans la condition
 			return (MUTEX_ERROR);
-		printf("ok2\n");
-		fill_nbr(i + 1, &data->philo[i].name);
-		printf("ok2 '%s' %d\n", data->philo[i].name, i);
-	// = fork;
+		data->philo[i].id = (size_t)i + 1;
+//		*data->philo[i].name = "";
+		printf("size of %lu ok\n", sizeof(char) * 20);
+		fill_nbr(data->philo[i].id, data->philo[i].name);
+		printf("ok\n");
 		i++;
+
 	}
-printf("ok\n");
-	// while (i < data.n_philo)
-	// {
-	// 	if (data->philo_dt = (t_philo_dt *)malloc(sizeof(*tmp) * data->n_philo))
-	// 		return(MALLOC_ERROR);
-	// 	i++;
-	// }
-	return (0);
 	//initialiser l'heure du repas comme si les philo venaient de manger
+	return (0);
 }
 
 int		init_prog(int ac, char **av, t_prog_dt *data)

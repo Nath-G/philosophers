@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:01:20 by nagresel          #+#    #+#             */
-/*   Updated: 2021/02/05 19:26:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/10 19:01:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,24 @@ int	ft_write_err_msg(char *err_msg, int ret)
 	return (ret);
 }
 
-void			fill_nbr(size_t nbr, char **ptr)
+void			fill_nbr(size_t nbr, char *ptr)
 {
 	char			c;
 	size_t			nnbr;
 	long long int	pow;
-
+	printf("ok\n");
 	pow = 10;
 	nnbr = nbr;
 	while (nnbr /= 10)
 		pow *= 10;
+	printf("ok1\n");
 	while ((pow /= 10))
 	{
 		c = (nbr / pow) % 10 + '0';
-		*(*ptr)++ = c;
+//		printf("ptr = %s %c ok2\n", ptr, *ptr);
+		*ptr = c;
+//		printf("ok3\n");
+		ptr++;
 	}
+	*ptr='\0';
 }
