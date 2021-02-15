@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/02/10 19:05:14 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/15 17:11:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,34 @@
 # define ARG_NB_ERROR -1
 # define ARG_FORMAT_ERROR -2
 # define ARG_VALUE_ERROR -3
-# define PTHREAD_ERROR -4
-# define MALLOC_ERROR -5
+# define MALLOC_ERROR -4
+# define PTHREAD_ERROR -5
 # define MUTEX_ERROR -6
 
-typedef enum e_status
-{
-	SLEEPING,
-	EATING,
-	THINKING
-}			t_status;
+// typedef enum e_status
+// {
+// 	SLEEPING,
+// 	EATING,
+// 	THINKING
+// }			t_status;
 
 
-typedef struct		s_fork
-{
-	pthread_mutex_t	fork;
-	size_t			nb_last;
-}					t_fork;
+// typedef struct		s_fork
+// {
+// 	pthread_mutex_t	fork;
+// 	size_t			nb_last;
+// }					t_fork;
 
 
 typedef struct s_philo_dt
 {
 	char			*name;
-	size_t			id;
+	int				id;
 	pthread_t		thread;
-	t_fork			*left_fork;
-	t_fork			*right_fork;
+	pthread_mutex_t left_fork;
+	pthread_mutex_t	right_fork;
+	//t_fork			*left_fork;
+	//t_fork			*right_fork;
 	pthread_mutex_t *lock_last_meal;
 	struct timeval	*time_last_meal;
 //	void			*next;	
@@ -77,14 +79,14 @@ int		init_philo(t_prog_dt *data);
 int	ft_display_error_msg(int error_nb);
 
 /* */
-void	launch_philo(t_prog_dt *data);
-
+void	launch_philo(t_prog_dt *data, t_param *param);
+void	taken_fork(t_philo_dt *phi);
 /* utils */
 int		ft_strlen(char *str);
 int		ft_write_err_msg(char *err_msg, int ret);
 int		ft_atoui(char *str, unsigned int *nb);
 int		ft_atoi(char *str, int *nb);
-void	fill_nbr(size_t nbr, char *ptr);
+void	fill_nbr(int nbr, char *ptr);
 void	ft_bzero(void *s, size_t n);
 
 #endif
