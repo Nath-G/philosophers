@@ -9,7 +9,7 @@ RM	= rm -f
 #-fsanitize=address
 
 # SRCS *********************************************************************** #
-SRCS	= main.c utils.c init.c log.c \
+SRCS	= main.c life_actions.c utils.c init.c log.c \
 
 # OBJS *********************************************************************** #
 

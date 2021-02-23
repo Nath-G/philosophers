@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/02/15 17:55:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 19:16:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,27 +47,35 @@ int		init_philo(t_prog_dt *data)
 	int			i;
 
 	i = 0;
-	
-//	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) * (data->n_philo))))
-//		return (MALLOC_ERROR);
 	while (i < data->n_philo)
 	{
 		if (!(data->philo[i].name = malloc(sizeof(char) * 10)))
-			// || !(data->philo[i].right_fork = (t_fork *)malloc(sizeof(t_fork) * (data->n_philo)))
-			// || !(data->philo[i].left_fork = (t_fork *)malloc(sizeof(t_fork) * (data->n_philo))))
+			return (MALLOC_ERROR);
+		if (!(data->philo[i].time_last_meal = malloc(sizeof(struct timeval))))
 			return (MALLOC_ERROR);
 		i++;
 	}
 	i = 0;
-	while(i < data->n_philo)
+	while (i < data->n_philo)
 	{
 		if (pthread_mutex_init(&data->philo[i].left_fork, NULL)) //!(i = 0) && ...dans la condition
 			return (MUTEX_ERROR);
 		if (pthread_mutex_init(&data->philo[i].right_fork, NULL)) //!(i = 0) && ...dans la condition
 			return (MUTEX_ERROR);
+		if (pthread_mutex_init(&data->philo[i].lock_log_display, NULL)) //!(i = 0) && ...dans la condition
+			return (MUTEX_ERROR);
 		data->philo[i].id = i + 1;
 		fill_nbr(data->philo[i].id, data->philo[i].name);
+	//	printf("i = %d dans init id = %d et name = %s \n", i, data->philo[i].id, data->philo[i].name);
 		i++;
+	}
+	if (!(data->time_start = malloc(sizeof(struct timeval))))
+			return (MALLOC_ERROR);
+		if (gettimeofday(data->time_start, NULL))
+	{
+		//	clean and free
+		return (ft_display_msg(TIME_ERROR));
+		exit(1);
 	}
 	//initialiser l'heure du repas comme si les philo venaient de manger
 	//initialiser les fouchettes
@@ -80,20 +88,22 @@ int		init_prog(int ac, char **av, t_prog_dt *data)
 
 	init_data(data);
 	if (ac != 5 && ac != 6)
-		return (ft_display_error_msg(ARG_NB_ERROR));
+		return (ft_display_msg(ARG_NB_ERROR));
 	if (check_argument_format(av))
-		return (ft_display_error_msg(ARG_FORMAT_ERROR));	
+		return (ft_display_msg(ARG_FORMAT_ERROR));	
 	if (ft_atoi(av[1], &data->n_philo))
-		return (ft_display_error_msg(ARG_FORMAT_ERROR));
+		return (ft_display_msg(ARG_FORMAT_ERROR));
 	if (data->n_philo < 2)
-		return (ft_display_error_msg(ARG_VALUE_ERROR));
+		return (ft_display_msg(ARG_VALUE_ERROR));
 	ft_atoui(av[2], &data->time_to_die);
 	ft_atoui(av[3], &data->time_to_eat);
 	ft_atoui(av[4], &data->time_to_sleep);
+	//data->have_n_meals = 0;
 	if (ac == 6)
 	{
+	//	data->have_n_meals = 1;
 		if (ft_atoi(av[5], &data->n_meals))
-			return (ft_display_error_msg(ARG_VALUE_ERROR));
+			return (ft_display_msg(ARG_VALUE_ERROR));
 	}
 	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) * (data->n_philo))))
 		return (MALLOC_ERROR);

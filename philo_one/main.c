@@ -6,28 +6,12 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/02/15 17:49:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/23 19:16:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 #include <stdio.h>//A ENLEVER
-
-void	taken_fork(t_philo_dt *phi)
-{
-	pthread_mutex_lock(&phi->left_fork);
-	pthread_mutex_lock(&phi->right_fork);
-	//start timestamp_in_ms;
-	printf("timestamp_in_ms %s has taken a fork \n", phi->name);
-	printf("timestamp_in_ms %s has taken a fork \n", phi->name);
-	printf("timestamp_in_ms %s is eating\n", phi->name);
-	// while (gettime - starttime < philo->time_to_eat)
-	// 	usleep("1");
-	sleep(5);
-	pthread_mutex_unlock(&phi->left_fork);
-	pthread_mutex_unlock(&phi->right_fork);
-	//printf("")
-}
 
 void	*my_philo_process(void *data_philo)
 {
@@ -42,23 +26,30 @@ void	*my_philo_process(void *data_philo)
 
 	i = 0;
 	//faut il faire le clean de la structure param ici???
-	printf("nb de repas : %d\n", data->n_meals);
+	//printf("dans launch  data i = %d dans init id = %d et name = %s \n", i, phi->id, data->phi.name);
+	//printf("dans launch param i = %d dans init id = %d et name = %s \n", i, ph->id, param[i].philo_dt->name);
 	sleep(1);
-	while (i < 5 && i < data->n_meals)
+	while (i < 2 || i < data->n_meals)
 	{
-		taken_fork(phi);
-		printf("timestamp_in_ms %s is sleeping %d\n", phi->name, i);
-		printf("timestamp_in_ms %s is thinking %d\n", phi->name, i);
+		philo_eats(phi, data);
+		philo_sleeps(phi, data);
+		philo_thinks(phi, data);
+	//	printf("timestamp_in_ms %s is sleeping %d\n", phi->name, i);
+	//	printf("timestamp_in_ms name = %s id = %d is thinking i = %d\n", phi->name, phi->id, i);
 		sleep(1);
 		i++;
 	}
-
 	pthread_exit(0);
 }
 
-void	launch_philo(t_prog_dt *data, t_param *param)
+int	launch_philo(t_prog_dt *data, t_param *param)
 {
 	int		i;
+	
+
+		// data->philo[i].id = i + 1;
+		// fill_nbr(data->philo[i].id, data->philo[i].name);
+		// printf("i = %d dans init id = %d et name = %s \n", i, data->philo[i].id, data->philo[i].name);
 
 	i = 0;
 	while (i < data->n_philo)
@@ -67,7 +58,11 @@ void	launch_philo(t_prog_dt *data, t_param *param)
 		param[i].data = data;
 		param[i].philo_dt = &data->philo[i];
 		if (pthread_create(&(data->philo[i].thread), NULL, my_philo_process, &param[i]) < 0)
-			ft_display_error_msg(PTHREAD_ERROR);
+		{
+			//free clean
+			ft_display_msg(PTHREAD_ERROR);
+			exit (1);
+		}
 		i++;
 	}
 	i = 0;
@@ -76,16 +71,12 @@ void	launch_philo(t_prog_dt *data, t_param *param)
 		pthread_join(data->philo[i].thread,NULL);
 		i++;
 	}
-	
+	return (0);
 }
-
 
 int	main(int ac, char **av)
 {
-	//void		*ret;
-//	int		err_nb;
 	t_prog_dt		data;
-//	t_philo_dt		*philo;
 	t_param			*param;
 	int	i;
 	
@@ -100,7 +91,7 @@ int	main(int ac, char **av)
 	if (!(param = (t_param *)malloc(sizeof(t_param) * data.n_philo)))
 	{
 		//ft_clean(&phi);
-		return (ft_display_error_msg(MALLOC_ERROR));
+		return (ft_display_msg(MALLOC_ERROR));
 		exit(1);
 	}
 	launch_philo(&data, param);
