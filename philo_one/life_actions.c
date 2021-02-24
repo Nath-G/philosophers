@@ -12,16 +12,17 @@
 
 #include "philo_one.h"
 
-static void	take_fork(pthread_mutex_t *fork, int phi_id, struct timeval *time_start, pthread_mutex_t *lock_log_display)
+static void	take_fork(pthread_mutex_t *fork, char *phi_name,
+				struct timeval *time_start)
 {
 	long unsigned int	time_stamp;
 	struct timeval		cur_time;
 
 	pthread_mutex_lock(fork);
 	ft_get_time(&cur_time);
-	time_stamp = (cur_time.tv_sec - time_start->tv_sec) * 1000000 + (cur_time.tv_usec - time_start->tv_usec);
-	ft_display_log((time_stamp / 1000), phi_id, FORK_INFO, lock_log_display);
-//	usleep(10);
+	time_stamp = (cur_time.tv_sec - time_start->tv_sec) * 1000000
+				+ (cur_time.tv_usec - time_start->tv_usec);
+	ft_display_log((time_stamp / 1000), phi_name, " has taken a fork\n");
 }
 
 int		philo_eats(t_philo_dt *phi, t_prog_dt *dt)
@@ -29,13 +30,12 @@ int		philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	struct timeval	cur_time;
 	long unsigned	time_stamp;
 
-	take_fork(&phi->left_fork, phi->id, dt->time_start, &phi->lock_log_display);
-	take_fork(&phi->right_fork, phi->id, dt->time_start, &phi->lock_log_display);
+	take_fork(&phi->left_fork, phi->name, dt->time_start);
+	take_fork(&phi->right_fork, phi->name, dt->time_start);
 	ft_get_time(&cur_time);
-	time_stamp = (cur_time.tv_sec - dt->time_start->tv_sec) * 1000000 + (cur_time.tv_usec - dt->time_start->tv_usec);
-	pthread_mutex_lock(&phi->lock_log_display);
-	ft_display_log((time_stamp / 1000), phi->id, EATING_INFO, &phi->lock_log_display);
-	pthread_mutex_unlock(&phi->lock_log_display);
+	time_stamp = (cur_time.tv_sec - dt->time_start->tv_sec) * 1000000
+				+ (cur_time.tv_usec - dt->time_start->tv_usec);
+	ft_display_log((time_stamp / 1000), phi->name, " is eating\n");
 	usleep(dt->time_to_eat * ONE_MILLISEC);
 	pthread_mutex_unlock(&phi->left_fork);
 	pthread_mutex_unlock(&phi->right_fork);
@@ -55,11 +55,9 @@ int		philo_sleeps(t_philo_dt *phi, t_prog_dt *dt)
 
 
 	ft_get_time(&cur_time);
-	time_stamp = (cur_time.tv_sec - dt->time_start->tv_sec) * 1000000 + (cur_time.tv_usec - dt->time_start->tv_usec);
-	pthread_mutex_lock(&phi->lock_log_display);
-	ft_display_log((time_stamp / 1000), phi->id, SLEEPING_INFO, &phi->lock_log_display);
-	pthread_mutex_unlock(&phi->lock_log_display);
-	//philo_takes_forks(phi, &cur_time, dt->time_start);
+	time_stamp = (cur_time.tv_sec - dt->time_start->tv_sec) * 1000000
+				+ (cur_time.tv_usec - dt->time_start->tv_usec);
+	ft_display_log((time_stamp / 1000), phi->name, " is sleeping\n");
 	usleep(dt->time_to_sleep * ONE_MILLISEC);
 	return (0);
 }
@@ -71,12 +69,9 @@ int		philo_thinks(t_philo_dt *phi, t_prog_dt *dt)
 
 
 	ft_get_time(&cur_time);
-	time_stamp = (cur_time.tv_sec - dt->time_start->tv_sec) * 1000000 + (cur_time.tv_usec - dt->time_start->tv_usec);
-	pthread_mutex_lock(&phi->lock_log_display);
-	ft_display_log((time_stamp / 1000), phi->id, THINKING_INFO, &phi->lock_log_display);
-	pthread_mutex_unlock(&phi->lock_log_display);
-	//philo_takes_forks(phi, &cur_time, dt->time_start);
-	//usleep(dt->time_to_think * ONE_MILLISEC);
-	usleep(10);
+	time_stamp = (cur_time.tv_sec - dt->time_start->tv_sec) * 1000000
+		+ (cur_time.tv_usec - dt->time_start->tv_usec);
+	ft_display_log((time_stamp / 1000), phi->name, " is thinking\n");
+	//usleep(100);
 	return (0);
 }

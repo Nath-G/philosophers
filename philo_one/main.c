@@ -13,7 +13,7 @@
 #include "philo_one.h"
 #include <stdio.h>//A ENLEVER
 
-void	*my_philo_process(void *data_philo)
+static void	*philo_life(void *data_philo)
 {
 	int 		i;
 	t_philo_dt	*phi;
@@ -34,30 +34,30 @@ void	*my_philo_process(void *data_philo)
 		philo_eats(phi, data);
 		philo_sleeps(phi, data);
 		philo_thinks(phi, data);
-	//	printf("timestamp_in_ms %s is sleeping %d\n", phi->name, i);
-	//	printf("timestamp_in_ms name = %s id = %d is thinking i = %d\n", phi->name, phi->id, i);
-		sleep(1);
+		//	printf("timestamp_in_ms %s is sleeping %d\n", phi->name, i);
+		//	printf("timestamp_in_ms name = %s id = %d is thinking i = %d\n", phi->name, phi->id, i);
+		//sleep(1);
 		i++;
 	}
 	pthread_exit(0);
 }
 
-int	launch_philo(t_prog_dt *data, t_param *param)
+static int	launch_philo(t_prog_dt *data, t_param *param)
 {
 	int		i;
-	
 
-		// data->philo[i].id = i + 1;
-		// fill_nbr(data->philo[i].id, data->philo[i].name);
-		// printf("i = %d dans init id = %d et name = %s \n", i, data->philo[i].id, data->philo[i].name);
+
+	// data->philo[i].id = i + 1;
+	// fill_nbr(data->philo[i].id, data->philo[i].name);
+	// printf("i = %d dans init id = %d et name = %s \n", i, data->philo[i].id, data->philo[i].name);
 
 	i = 0;
 	while (i < data->n_philo)
 	{
-		
+
 		param[i].data = data;
 		param[i].philo_dt = &data->philo[i];
-		if (pthread_create(&(data->philo[i].thread), NULL, my_philo_process, &param[i]) < 0)
+		if (pthread_create(&(data->philo[i].thread), NULL, philo_life, &param[i]) < 0)
 		{
 			//free clean
 			ft_display_msg(PTHREAD_ERROR);
@@ -79,7 +79,7 @@ int	main(int ac, char **av)
 	t_prog_dt		data;
 	t_param			*param;
 	int	i;
-	
+
 	i = 0;
 	if (init_prog(ac, av, &data))
 		exit(1);

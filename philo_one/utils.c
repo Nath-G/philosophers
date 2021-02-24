@@ -24,22 +24,22 @@ int		ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_strdup(const char *s1)
-{
-	int		i;
-	char	*str;
+// char	*ft_strdup(const char *s1)
+// {
+// 	int		i;
+// 	char	*str;
 
-	if (!(str = (char *)malloc(sizeof(*str) * ft_strlen(s1) + 1)))
-		return (NULL);
-	i = 0;
-	while (*(s1 + i))
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
-}
+// 	if (!(str = (char *)malloc(sizeof(*str) * ft_strlen(s1) + 1)))
+// 		return (NULL);
+// 	i = 0;
+// 	while (*(s1 + i))
+// 	{
+// 		str[i] = s1[i];
+// 		i++;
+// 	}
+// 	str[i] = '\0';
+// 	return (str);
+// }
 
 
 char	*ft_strjoinfree(char *s1, const char *s2)
@@ -51,7 +51,7 @@ char	*ft_strjoinfree(char *s1, const char *s2)
 	if (!s1 || !s2)
 		return (NULL);
 	if (!(str = (char *)malloc(sizeof(*str) * (ft_strlen(s1) +
-			ft_strlen(s2)) + 1)))
+						ft_strlen(s2)) + 1)))
 		return (NULL);
 	i = 0;
 	while (s1[i])
@@ -70,7 +70,7 @@ char	*ft_strjoinfree(char *s1, const char *s2)
 	return (str);
 }
 
-int		ft_atoui(char *str, unsigned int *nb)
+int		ft_atoui(char *str, unsigned int *nb)// dans init
 {
 	if (*str == '\0')
 		return (1);
@@ -82,7 +82,7 @@ int		ft_atoui(char *str, unsigned int *nb)
 	return (0);
 }
 
-int		ft_atoi(char *str, int *nb)
+int		ft_atoi(char *str, int *nb) // dans init
 {
 	if (*str == '\0')
 		return (1);

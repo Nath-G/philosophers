@@ -62,16 +62,16 @@ int		init_philo(t_prog_dt *data)
 			return (MUTEX_ERROR);
 		if (pthread_mutex_init(&data->philo[i].right_fork, NULL)) //!(i = 0) && ...dans la condition
 			return (MUTEX_ERROR);
-		if (pthread_mutex_init(&data->philo[i].lock_log_display, NULL)) //!(i = 0) && ...dans la condition
-			return (MUTEX_ERROR);
+		// if (pthread_mutex_init(&data->philo[i].lock_log_display, NULL)) //!(i = 0) && ...dans la condition
+		// 	return (MUTEX_ERROR);
 		data->philo[i].id = i + 1;
 		fill_nbr(data->philo[i].id, data->philo[i].name);
-	//	printf("i = %d dans init id = %d et name = %s \n", i, data->philo[i].id, data->philo[i].name);
+		//	printf("i = %d dans init id = %d et name = %s \n", i, data->philo[i].id, data->philo[i].name);
 		i++;
 	}
 	if (!(data->time_start = malloc(sizeof(struct timeval))))
-			return (MALLOC_ERROR);
-		if (gettimeofday(data->time_start, NULL))
+		return (MALLOC_ERROR);
+	if (gettimeofday(data->time_start, NULL))
 	{
 		//	clean and free
 		return (ft_display_msg(TIME_ERROR));
@@ -85,7 +85,6 @@ int		init_philo(t_prog_dt *data)
 
 int		init_prog(int ac, char **av, t_prog_dt *data)
 {
-
 	init_data(data);
 	if (ac != 5 && ac != 6)
 		return (ft_display_msg(ARG_NB_ERROR));
@@ -101,9 +100,10 @@ int		init_prog(int ac, char **av, t_prog_dt *data)
 	//data->have_n_meals = 0;
 	if (ac == 6)
 	{
-	//	data->have_n_meals = 1;
 		if (ft_atoi(av[5], &data->n_meals))
 			return (ft_display_msg(ARG_VALUE_ERROR));
+		if (data->n_meals < 1)
+		return (ft_display_msg(ARG_VALUE_ERROR));
 	}
 	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) * (data->n_philo))))
 		return (MALLOC_ERROR);

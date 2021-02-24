@@ -56,9 +56,9 @@ typedef struct s_philo_dt
 	pthread_mutex_t	right_fork;
 	//t_fork			*left_fork;
 	//t_fork			*right_fork;
-	pthread_mutex_t lock_log_display;
+	//pthread_mutex_t lock_log_display;
 	struct timeval	*time_last_meal;
-//	void			*next;	
+	//	void			*next;	
 }				t_philo_dt;
 
 typedef struct s_prog_dt
@@ -86,18 +86,16 @@ int		init_philo(t_prog_dt *data);
 
 /* log */
 int		ft_display_msg(int msg_nb);
-int		ft_display_lunbr(long unsigned nbr);
+//int		ft_display_lunbr(long unsigned nbr);
 int		ft_get_time(struct timeval *cur_time);
-//void	ft_display_log(long unsigned time_stamp, char *philo_name, int msg_nb, pthread_mutex_t *lock_log_display);
-void	ft_display_log(long unsigned time_stamp, int philo_nb, int msg_nb, pthread_mutex_t *lock_log_display);
+void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg);
 
 /* */
-int		launch_philo(t_prog_dt *data, t_param *param);
+//int		launch_philo(t_prog_dt *data, t_param *param);
 int		philo_eats(t_philo_dt *phi, t_prog_dt *data);
 int		philo_sleeps(t_philo_dt *phi, t_prog_dt *data);
 int		philo_thinks(t_philo_dt *phi, t_prog_dt *data);
-// void	philo_takes_forks(t_philo_dt *phi, struct timeval *cur_time,
-// 							struct timeval *time_start);
+
 /* utils */
 int		ft_strlen(const char *str);
 int		ft_write_msg(char *msg, int ret);
@@ -105,8 +103,7 @@ int		ft_atoui(char *str, unsigned int *nb);
 int		ft_atoi(char *str, int *nb);
 void	fill_nbr(int nbr, char *ptr);
 void	fill_lunbr(long unsigned nbr, char *ptr);
-void	ft_bzero(void *s, size_t n);
-char	*ft_strdup(const char *s1);
+///void	ft_bzero(void *s, size_t n);
 char	*ft_strjoinfree(char *s1, const char *s2);
 
 #endif
