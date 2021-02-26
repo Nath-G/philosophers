@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 17:58:49 by nagresel          #+#    #+#             */
-/*   Updated: 2021/02/23 19:10:37 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/24 15:59:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,46 +27,13 @@ int	ft_display_msg(int msg_nb)
 	return (0);
 }
 
-// int	ft_display_lunbr(long unsigned nbr)
-// {
-// 	char *ptr;
-
-// 	if (!(ptr = malloc(sizeof(char) * 32)))
-// 	{
-// 		ft_display_msg(MALLOC_ERROR);
-// 		return(-1);
-// 	}
-// 	ptr[0] = '\0';
-// 	//(void)nbr;
-// 	fill_lunbr(nbr, ptr);
-// 	ft_write_msg(ptr, 0);
-// 	free(ptr);
-// 	return(0);
-// }
-
-// int	ft_display_nbr(int nbr)
-// {
-// 	char *ptr;
-
-// 	if (!(ptr = malloc(sizeof(char) * 32)))
-// 	{
-// 		ft_display_msg(MALLOC_ERROR);
-// 		return(-1);
-// 	}
-// 	ptr[0] = '\0';
-// 	fill_nbr(nbr, ptr);
-// 	ft_write_msg(ptr, 0);
-// 	free(ptr);
-// 	return(0);
-// }
-
 int		ft_get_time(struct timeval *cur_time)
 {
 	if (gettimeofday(cur_time, NULL)) //!(i = 0) && ...dans la condition
 	{
 		//clean nd free
 		ft_display_msg(TIME_ERROR);
-		exit (1);
+		exit (1);//il faut faire un return (1) et free dans la fonction précédente.
 	}
 	return (0);
 }	
@@ -86,7 +53,7 @@ void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg)
 	{
 		//clean
 		ft_display_msg(MALLOC_ERROR);
-		exit (1);
+		exit (1);//il faut faire un return et free la fonction précédente
 	}
 	*ptr = '\0';
 	//pthread_mutex_lock(lock_log_display);

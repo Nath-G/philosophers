@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/02/23 19:17:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 16:12:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,8 @@ typedef struct s_philo_dt
 	int				id;
 	pthread_t		thread;
 	pthread_mutex_t left_fork;
-	pthread_mutex_t	right_fork;
-	//t_fork			*left_fork;
-	//t_fork			*right_fork;
-	//pthread_mutex_t lock_log_display;
-	struct timeval	*time_last_meal;
-	//	void			*next;	
+	pthread_mutex_t	*right_fork;
+	struct timeval	*time_last_meal;	
 }				t_philo_dt;
 
 typedef struct s_prog_dt
@@ -84,6 +80,8 @@ typedef struct s_param
 int		init_prog(int ac, char **av, t_prog_dt *data);
 int		init_philo(t_prog_dt *data);
 
+/* clean*/
+void	clean_philo(t_prog_dt *data);
 /* log */
 int		ft_display_msg(int msg_nb);
 //int		ft_display_lunbr(long unsigned nbr);

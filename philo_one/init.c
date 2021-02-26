@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/02/23 19:16:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/26 16:21:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,26 @@ int		init_philo(t_prog_dt *data)
 			return (MALLOC_ERROR);
 		if (!(data->philo[i].time_last_meal = malloc(sizeof(struct timeval))))
 			return (MALLOC_ERROR);
+		if (pthread_mutex_init(&data->philo[i].left_fork, NULL)) //!(i = 0) && ...dans la condition
+			return (MUTEX_ERROR);
 		i++;
 	}
 	i = 0;
 	while (i < data->n_philo)
 	{
-		if (pthread_mutex_init(&data->philo[i].left_fork, NULL)) //!(i = 0) && ...dans la condition
-			return (MUTEX_ERROR);
-		if (pthread_mutex_init(&data->philo[i].right_fork, NULL)) //!(i = 0) && ...dans la condition
-			return (MUTEX_ERROR);
+
+		// if (pthread_mutex_init(&data->philo[i].right_fork, NULL)) //!(i = 0) && ...dans la condition
+		// 	return (MUTEX_ERROR);
 		// if (pthread_mutex_init(&data->philo[i].lock_log_display, NULL)) //!(i = 0) && ...dans la condition
 		// 	return (MUTEX_ERROR);
+		if (i != 0)
+			data->philo[i].right_fork = &data->philo[i - 1].left_fork;
 		data->philo[i].id = i + 1;
 		fill_nbr(data->philo[i].id, data->philo[i].name);
 		//	printf("i = %d dans init id = %d et name = %s \n", i, data->philo[i].id, data->philo[i].name);
 		i++;
 	}
+	data->philo[0].right_fork = &data->philo[i - 1].left_fork;
 	if (!(data->time_start = malloc(sizeof(struct timeval))))
 		return (MALLOC_ERROR);
 	if (gettimeofday(data->time_start, NULL))
