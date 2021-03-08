@@ -4,8 +4,10 @@
 - mettre -g3 dans les flags du make file
 - compiler
 - executer avec la cmd suivante :
-```gdb --args ./philo_one 2 5 5 3 7```
+```gdb --args ./philo_one 3 5000 300 300 4```
 ```run```
 - en cas de problème, taper :
 ```backtrace```
+```valgrind --leak-check=yes ./philo_one 3 5000 300 300 4```
+
 

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/02/26 16:12:40 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 12:26:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,6 @@
 # define EATING_INFO 12
 # define THINKING_INFO 13
 # define SLEEPING_INFO 14
-// typedef enum e_status
-// {
-// 	SLEEPING,
-// 	EATING,
-// 	THINKING
-// }			t_status;
-
-
-// typedef struct		s_fork
-// {
-// 	pthread_mutex_t	fork;
-// 	size_t			nb_last;
-// }					t_fork;
-
 
 typedef struct s_philo_dt
 {
@@ -54,7 +40,15 @@ typedef struct s_philo_dt
 	pthread_t		thread;
 	pthread_mutex_t left_fork;
 	pthread_mutex_t	*right_fork;
-	struct timeval	*time_last_meal;	
+	struct timeval	*time_last_meal;
+	struct timeval	*time_start;
+	int				meals_ate;
+	int				is_dead;
+	pthread_mutex_t meals;
+	unsigned int	time_to_die;
+	unsigned int	time_to_eat;
+	unsigned int	time_to_sleep;
+
 }				t_philo_dt;
 
 typedef struct s_prog_dt
@@ -66,13 +60,18 @@ typedef struct s_prog_dt
 	int				n_meals;
 	struct timeval 	*time_start;
 	t_philo_dt		*philo;
+	int				is_last_meal_eaten;
+	int				is_one_philo_dead;//is_one_philo_died
+//	int			x_is_dead;
+	pthread_mutex_t died;
+	pthread_mutex_t meals;
 }				t_prog_dt;
 
 
 typedef struct s_param
 {
 
-	t_prog_dt			*data;
+	t_prog_dt		*data;
 	t_philo_dt		*philo_dt;
 }				t_param;
 
@@ -82,17 +81,20 @@ int		init_philo(t_prog_dt *data);
 
 /* clean*/
 void	clean_philo(t_prog_dt *data);
+
 /* log */
 int		ft_display_msg(int msg_nb);
-//int		ft_display_lunbr(long unsigned nbr);
-int		ft_get_time(struct timeval *cur_time);
+int		ft_get_time(struct timeval *time);
 void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg);
+unsigned long int ft_get_time_diff(struct timeval *cur_time, struct timeval *time);
 
-/* */
-//int		launch_philo(t_prog_dt *data, t_param *param);
+/* lif actions */
 int		philo_eats(t_philo_dt *phi, t_prog_dt *data);
 int		philo_sleeps(t_philo_dt *phi, t_prog_dt *data);
 int		philo_thinks(t_philo_dt *phi, t_prog_dt *data);
+
+/* monitoring */
+void	monitor(t_prog_dt *data);
 
 /* utils */
 int		ft_strlen(const char *str);
@@ -101,7 +103,6 @@ int		ft_atoui(char *str, unsigned int *nb);
 int		ft_atoi(char *str, int *nb);
 void	fill_nbr(int nbr, char *ptr);
 void	fill_lunbr(long unsigned nbr, char *ptr);
-///void	ft_bzero(void *s, size_t n);
 char	*ft_strjoinfree(char *s1, const char *s2);
 
 #endif
