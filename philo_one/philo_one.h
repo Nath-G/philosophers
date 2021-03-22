@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_one.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/08 12:26:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/22 19:02:51 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define PTHREAD_ERROR -5
 # define MUTEX_ERROR -6
 # define TIME_ERROR -7
+# define ARG_INIT_ERROR -8
 # define TIMESTAMP_INFO 10
 # define FORK_INFO 11
 # define EATING_INFO 12
@@ -41,14 +42,9 @@ typedef struct s_philo_dt
 	pthread_mutex_t left_fork;
 	pthread_mutex_t	*right_fork;
 	struct timeval	*time_last_meal;
-	struct timeval	*time_start;
 	int				meals_ate;
-	int				is_dead;
-	pthread_mutex_t meals;
-	unsigned int	time_to_die;
-	unsigned int	time_to_eat;
-	unsigned int	time_to_sleep;
-
+	pthread_mutex_t meal_time;
+	pthread_mutex_t finish_eaten;
 }				t_philo_dt;
 
 typedef struct s_prog_dt
@@ -60,11 +56,9 @@ typedef struct s_prog_dt
 	int				n_meals;
 	struct timeval 	*time_start;
 	t_philo_dt		*philo;
-	int				is_last_meal_eaten;
-	int				is_one_philo_dead;//is_one_philo_died
-//	int			x_is_dead;
-	pthread_mutex_t died;
-	pthread_mutex_t meals;
+	pthread_mutex_t finish;
+	pthread_t		eats_thread;
+	pthread_t		deaths_thread;
 }				t_prog_dt;
 
 
@@ -94,7 +88,10 @@ int		philo_sleeps(t_philo_dt *phi, t_prog_dt *data);
 int		philo_thinks(t_philo_dt *phi, t_prog_dt *data);
 
 /* monitoring */
-void	monitor(t_prog_dt *data);
+int		monitor(t_prog_dt *data);
+void	*death_checker(void *data);
+//void	philo_killer(t_prog_dt *data);
+
 
 /* utils */
 int		ft_strlen(const char *str);
