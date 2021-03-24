@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/22 19:02:51 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/23 19:30:02 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ typedef struct s_prog_dt
 	int				n_meals;
 	struct timeval 	*time_start;
 	t_philo_dt		*philo;
-	pthread_mutex_t finish;
+	int				one_is_died;
+	int				is_finish;
 	pthread_t		eats_thread;
 	pthread_t		deaths_thread;
 }				t_prog_dt;
@@ -88,9 +89,10 @@ int		philo_sleeps(t_philo_dt *phi, t_prog_dt *data);
 int		philo_thinks(t_philo_dt *phi, t_prog_dt *data);
 
 /* monitoring */
-int		monitor(t_prog_dt *data);
-void	*death_checker(void *data);
-//void	philo_killer(t_prog_dt *data);
+// int		monitor(t_prog_dt *data);
+void	death_checker(t_prog_dt *data);
+void	*eats_checker(void *data);
+void	philo_killer(t_prog_dt *data);
 
 
 /* utils */

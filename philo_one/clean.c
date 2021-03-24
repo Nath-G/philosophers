@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/03/22 18:43:00 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/24 10:59:16 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ void	philo_killer(t_prog_dt *data)
 
 	i = 0;
 	nb = data->n_philo;
+
 	while (i < nb)
 	{
+		pthread_mutex_lock(&(data->philo[i].meal_time));
 		pthread_join(data->philo[i].thread,NULL);
 		i++;
 	}
@@ -31,13 +33,9 @@ void	clean_philo(t_prog_dt *data)
 	int			i;
 
 	i = 0;
-
+	philo_killer(data);
 	while (i < data->n_philo)
 	{
-		// pthread_mutex_lock(&data->philo[i].meal_time);
-		// pthread_mutex_lock(&data->philo[i].left_fork);
-		// pthread_mutex_lock(data->philo[i].right_fork);
-		// pthread_mutex_lock(&data->philo[i].finish_eaten);
 		pthread_mutex_destroy(&data->philo[i].left_fork);
 		pthread_mutex_destroy(&data->philo[i].finish_eaten);
 		pthread_mutex_destroy(&data->philo[i].meal_time);
@@ -47,10 +45,8 @@ void	clean_philo(t_prog_dt *data)
 			free(data->philo[i].time_last_meal);
 		i++;
 	}
-		// philo_killer(data);
 	if (data->time_start)
 		free(data->time_start);
 	if (data->philo)
 		free(data->philo);
-	pthread_mutex_destroy(&data->finish);
 }

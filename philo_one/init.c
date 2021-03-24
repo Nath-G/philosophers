@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/22 19:26:39 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/24 12:44:54 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	check_argument_format(char **av)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	i = 1;
 	j = 0;
@@ -24,7 +24,7 @@ static int	check_argument_format(char **av)
 		j = 0;
 		while (av[i][j])
 		{
-			if(av[i][j] < '0' || av[i][j] > '9')
+			if (av[i][j] < '0' || av[i][j] > '9')
 				return (1);
 			j++;
 		}
@@ -35,39 +35,42 @@ static int	check_argument_format(char **av)
 
 static int	init_data(char **av, t_prog_dt *data)
 {
-	
 	data->n_philo = 0;
 	data->time_to_die = 0;
 	data->time_to_eat = 0;
 	data->time_to_sleep = 0;
 	data->n_meals = -1;
+	data->one_is_died = 0;
+	data->is_finish = 0;
 	if (ft_atoui(av[2], &data->time_to_die))
 		return (ft_display_msg(ARG_INIT_ERROR));
 	if (ft_atoui(av[3], &data->time_to_eat))
 		return (ft_display_msg(ARG_INIT_ERROR));
 	if (ft_atoui(av[4], &data->time_to_sleep))
 		return (ft_display_msg(ARG_INIT_ERROR));
+	data->time_to_die = data->time_to_die *1000;
+	data->time_to_eat = data->time_to_eat *1000;
+	data->time_to_sleep = data->time_to_sleep *1000;
 	return (0);
 }
 
 int		init_philo(t_prog_dt *data)
 {
-	int			i;
+	int i;
 
 	i = 0;
-	// if (!(data->deaths_thread = malloc(sizeof(pthread_t))))
-		// return (MALLOC_ERROR);
 	while (i < data->n_philo)
 	{
 		if (!(data->philo[i].name = malloc(sizeof(char) * 10)))
 			return (MALLOC_ERROR);
-		if (!(data->philo[i].time_last_meal = malloc(sizeof(struct timeval))))
+		if (!(data->philo[i].time_last_meal =
+					malloc(sizeof(struct timeval))))
 			return (MALLOC_ERROR);
-		if (pthread_mutex_init(&data->philo[i].left_fork, NULL)) //!(i = 0) && ...dans la condition
+		if (pthread_mutex_init(&data->philo[i].left_fork, NULL))
 			return (MUTEX_ERROR);
-		if (pthread_mutex_init(&data->philo[i].finish_eaten, NULL)) //!(i = 0) && ...dans la condition
+		if (pthread_mutex_init(&data->philo[i].finish_eaten, NULL))
 			return (MUTEX_ERROR);
-		if (pthread_mutex_init(&data->philo[i].meal_time, NULL)) //!(i = 0) && ...dans la condition
+		if (pthread_mutex_init(&data->philo[i].meal_time, NULL))
 			return (MUTEX_ERROR);
 		pthread_mutex_lock(&data->philo[i].finish_eaten);
 		i++;
@@ -87,7 +90,7 @@ int		init_philo(t_prog_dt *data)
 		return (MALLOC_ERROR);
 	if (gettimeofday(data->time_start, NULL))
 		return (ft_display_msg(TIME_ERROR));
-	i  = 0;
+	i = 0;
 	while (i < data->n_philo)
 	{
 		*data->philo[i].time_last_meal = *data->time_start;
@@ -103,7 +106,7 @@ int		init_prog(int ac, char **av, t_prog_dt *data)
 	if (ac != 5 && ac != 6)
 		return (ft_display_msg(ARG_NB_ERROR));
 	if (check_argument_format(av))
-		return (ft_display_msg(ARG_FORMAT_ERROR));	
+		return (ft_display_msg(ARG_FORMAT_ERROR));
 	if (ft_atoi(av[1], &data->n_philo))
 		return (ft_display_msg(ARG_FORMAT_ERROR));
 	if (data->n_philo < 2)
@@ -113,12 +116,10 @@ int		init_prog(int ac, char **av, t_prog_dt *data)
 		if (ft_atoi(av[5], &data->n_meals))
 			return (ft_display_msg(ARG_VALUE_ERROR));
 		if (data->n_meals < 1)
-		return (ft_display_msg(ARG_VALUE_ERROR));
+			return (ft_display_msg(ARG_VALUE_ERROR));
 	}
-	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) * (data->n_philo))))
+	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) *
+					(data->n_philo))))
 		return (MALLOC_ERROR);
-	if (pthread_mutex_init(&data->finish, NULL)) //!(i = 0) && ...dans la condition
-		return (MUTEX_ERROR);
-	pthread_mutex_lock(&data->finish);
 	return (0);
 }

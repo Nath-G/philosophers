@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/22 17:31:07 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/24 13:24:14 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,88 +33,51 @@
 // et dans le main (/le thread principale) du coup:
 // - on attend sur "finish" en essayant de le lock
 // l'avantage de faire tout ça maintenant, c'est que ton code pour philo_three et philo_two serait quasi le même que philo_one
-// while (1)
-// {
 // 	pthread_lock(&dt->finish);
-		
-// }
-// return(0);
-// void	philo_killer(t_prog_dt *data)
-// {
-// 	int	i;
-// 	int	nb;
 
-// 	i = 0;
-// 	nb = data->n_philo;
-// 	while (i < nb)
-// 	{
-// 		pthread_join(data->philo[i].thread,NULL);
-// 		i++;
-// 	}
-// }
-static void	eats_checker(void *data_philo)
+void	*eats_checker(void *data_philo)
 {
 	t_prog_dt	*data;
-	int i;
-	//tmp = (t_param *)data_philo;
+	int			i;
+
 	data = (t_prog_dt *)data_philo;
-	i = 0;
-	
-	while (i < data->n_philo)
+	i = 0;	
+	while (i < data->n_philo && !data->one_is_died)
 	{
-    	pthread_mutex_lock(&data->philo[i].finish_eaten);
+    	pthread_mutex_lock(&data->philo[i].finish_eaten);//&& !data->one_is_died)// || !data->one_is_died)
     	++i;
 	}
 	printf("meals are striked ! \n");//est-ce que je met un message d'erreur?
-	pthread_mutex_unlock(&data->finish);
+	data->is_finish = 1;
+//	pthread_mutex_unlock(&data->finish);
+	return (NULL);
 }
 
 
-void	*death_checker(void *data)
+void	death_checker(t_prog_dt *dt)
 {
-	t_prog_dt			*dt;
 	int					i;
 	t_philo_dt			*phi;
 	unsigned long int	time_stamp;
 	struct timeval		cur_time;
 	
-
 	i = 0;
-	dt = (t_prog_dt *)data;
 	phi = dt->philo;
-	while (i < dt->n_philo)
+	while (!dt->is_finish)
 	{
-		pthread_mutex_lock(&phi[i].meal_time);
+		pthread_mutex_lock(&(phi[i].meal_time));
 		ft_get_time(&cur_time);
 		time_stamp = ft_get_time_diff(&cur_time, phi[i].time_last_meal);
-		if ((time_stamp/1000) > dt->time_to_die)
+		if ((time_stamp) > dt->time_to_die)
 		{
+			dt->is_finish = 1;
+			dt->one_is_died = 1;
 			time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 			ft_display_log((time_stamp / 1000), phi[i].name, " dead\n");
-			pthread_mutex_unlock(&phi[i].meal_time);
-			pthread_mutex_unlock(&dt->finish);
-			return((void *)0);
 		}
-		pthread_mutex_unlock(&phi[i].meal_time);
+		pthread_mutex_unlock(&(phi[i].meal_time));
 		++i;
 		if (i == dt->n_philo)
 			i = 0;
 	}
-	return((void *)0);
-}
-
-int	monitor(t_prog_dt *data)
-{
-	int i;
-	i = 0;
-
-	
-	if (data->n_meals != -1)
-		eats_checker(data);
-	else
-	{
-		while (pthread_mutex_lock(&data->finish))
-			usleep(1);
-	}	
-		return(0);
 }
