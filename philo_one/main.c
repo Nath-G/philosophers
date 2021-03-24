@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/24 13:18:11 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/24 13:39:12 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 	int		i;
 
 	i = 0;
-	while (i < data->n_philo)
+	while (i < data->n_philo && param && data)
 	{
 		ft_get_time(data->philo[i].time_last_meal);
 		param[i].data = data;
@@ -67,7 +67,7 @@ int	main(int ac, char **av)
 		clean_philo(&data);
 		return (ft_display_msg(MALLOC_ERROR));
 	}
-	if (data.n_meals < 0)
+	if (data.n_meals != -1)
 		if (pthread_create((&data.eats_thread), NULL, eats_checker, &data) < 0)
 			return(ft_display_msg(PTHREAD_ERROR));
 	launch_philo(&data, param);	
