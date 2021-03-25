@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/25 13:55:27 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/25 18:59:42 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	main(int ac, char **av)
 	death_checker(&data);
 	if (data.n_meals != -1)
 		pthread_join(data.eats_thread,NULL);
+	philo_killer(&data);
 	if (param)
 		free(param);
 	clean_philo(&data);
