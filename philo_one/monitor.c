@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/24 13:24:14 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:52:55 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ void	*eats_checker(void *data_philo)
     	pthread_mutex_lock(&data->philo[i].finish_eaten);//&& !data->one_is_died)// || !data->one_is_died)
     	++i;
 	}
-	printf("meals are striked ! \n");//est-ce que je met un message d'erreur?
 	data->is_finish = 1;
+	if (!data->one_is_died)
+		printf("meals are striked ! \n");//est-ce que je met un message d'erreur?
 //	pthread_mutex_unlock(&data->finish);
 	return (NULL);
 }
@@ -79,5 +80,15 @@ void	death_checker(t_prog_dt *dt)
 		++i;
 		if (i == dt->n_philo)
 			i = 0;
+	}
+	if (dt->n_meals != -1)
+	{
+		i = 0;
+		while (i < dt->n_philo)
+		{
+			if (dt->philo[i].meals_ate < dt->n_meals)
+				pthread_mutex_unlock(&(phi[i].finish_eaten));
+			i++;
+		}
 	}
 }
