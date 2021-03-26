@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/23 19:30:02 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/26 11:08:54 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo_dt
 	int				meals_ate;
 	pthread_mutex_t meal_time;
 	pthread_mutex_t finish_eaten;
+	int				is_start_sleeping;
 }				t_philo_dt;
 
 typedef struct s_prog_dt
@@ -75,7 +76,7 @@ int		init_prog(int ac, char **av, t_prog_dt *data);
 int		init_philo(t_prog_dt *data);
 
 /* clean*/
-void	clean_philo(t_prog_dt *data);
+void	clean_philo(t_prog_dt *data, t_param *param);
 
 /* log */
 int		ft_display_msg(int msg_nb);

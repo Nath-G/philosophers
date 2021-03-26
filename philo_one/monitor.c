@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/25 14:52:55 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:19:16 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,12 @@ void	*eats_checker(void *data_philo)
 	i = 0;	
 	while (i < data->n_philo && !data->one_is_died)
 	{
-    	pthread_mutex_lock(&data->philo[i].finish_eaten);//&& !data->one_is_died)// || !data->one_is_died)
+    	pthread_mutex_lock(&data->philo[i].finish_eaten);
     	++i;
 	}
 	data->is_finish = 1;
 	if (!data->one_is_died)
-		printf("meals are striked ! \n");//est-ce que je met un message d'erreur?
-//	pthread_mutex_unlock(&data->finish);
+		printf("All philosophers almost ate %d times!\n", data->n_meals);
 	return (NULL);
 }
 
@@ -74,7 +73,7 @@ void	death_checker(t_prog_dt *dt)
 			dt->is_finish = 1;
 			dt->one_is_died = 1;
 			time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-			ft_display_log((time_stamp / 1000), phi[i].name, " dead\n");
+			ft_display_log((time_stamp / 1000), phi[i].name, " died\n");
 		}
 		pthread_mutex_unlock(&(phi[i].meal_time));
 		++i;
