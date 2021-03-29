@@ -12,8 +12,7 @@
 
 #include "philo_one.h"
 
-// modifier ft_display_log avec un int en sortie pour eviter de se servir de exit
-int	ft_display_msg(int msg_nb)
+int					ft_display_msg(int msg_nb)
 {
 	if (msg_nb == ARG_NB_ERROR)
 		return (ft_write_msg("Error : wrong argument number!\n", msg_nb));
@@ -30,29 +29,29 @@ int	ft_display_msg(int msg_nb)
 	return (0);
 }
 
-int		ft_get_time(struct timeval *time)
+int					ft_get_time(struct timeval *time)
 {
-	if (gettimeofday(time, NULL)) //!(i = 0) && ...dans la condition
+	if (gettimeofday(time, NULL))
 	{
-		//clean nd free
 		ft_display_msg(TIME_ERROR);
-		return(1);//il faut faire un return (1) et free dans la fonction précédente.
+		return (1);
 	}
 	return (0);
-}	
-
-unsigned long int ft_get_time_diff(struct timeval *cur_time, struct timeval *time)
-{
-	return ((cur_time->tv_sec - time->tv_sec) * 1000000
-				+ (cur_time->tv_usec - time->tv_usec));
 }
 
-void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg)
+unsigned long int	ft_get_time_diff(struct timeval *tm1, struct timeval *tm2)
 {
-	char	*ptr;
-	char	*str;
-	int		i;
-	long unsigned nbr;
+	return ((tm1->tv_sec - tm2->tv_sec) * 1000000
+					+ (tm1->tv_usec - tm2->tv_usec));
+}
+
+void				ft_display_log(long unsigned time_stamp, char *philo_name,
+						char *msg)
+{
+	int				i;
+	char			*ptr;
+	char			*str;
+	long unsigned	nbr;
 
 	nbr = time_stamp;
 	i = 0;
@@ -60,9 +59,8 @@ void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg)
 		i++;
 	if (!(ptr = (char *)malloc(sizeof(char) * i + 2)))
 	{
-		//clean
 		ft_display_msg(MALLOC_ERROR);
-		exit (1);//il faut faire un return et free la fonction précédente
+		exit(1);
 	}
 	*ptr = '\0';
 	fill_lunbr(time_stamp, ptr);

@@ -27,7 +27,7 @@ static void	take_forks(t_philo_dt *phi, t_prog_dt *dt)
 		ft_display_log((time_stamp / 1000), phi->name, " has taken a fork\n");
 }
 
-int		philo_eats(t_philo_dt *phi, t_prog_dt *dt)
+int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 {
 	struct timeval	cur_time;
 	long unsigned	time_stamp;
@@ -42,7 +42,8 @@ int		philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 		ft_display_log((time_stamp / 1000), phi->name, " is eating\n");
 		pthread_mutex_unlock(&phi->meal_time);
 		ft_get_time(&cur_time);
-		usleep(dt->time_to_eat - ft_get_time_diff(&cur_time, phi->time_last_meal));
+		usleep(dt->time_to_eat
+			- ft_get_time_diff(&cur_time, phi->time_last_meal));
 		phi->meals_ate++;
 		if (phi->meals_ate >= dt->n_meals)
 			pthread_mutex_unlock(&phi->finish_eaten);
@@ -52,7 +53,7 @@ int		philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	return (0);
 }
 
-int		philo_sleeps(t_philo_dt *phi, t_prog_dt *dt)
+int			philo_sleeps(t_philo_dt *phi, t_prog_dt *dt)
 {
 	struct timeval	cur_time;
 	long unsigned	time_stamp;
@@ -67,7 +68,7 @@ int		philo_sleeps(t_philo_dt *phi, t_prog_dt *dt)
 	return (0);
 }
 
-int		philo_thinks(t_philo_dt *phi, t_prog_dt *dt)
+int			philo_thinks(t_philo_dt *phi, t_prog_dt *dt)
 {
 	struct timeval	cur_time;
 	long unsigned	time_stamp;
@@ -77,10 +78,6 @@ int		philo_thinks(t_philo_dt *phi, t_prog_dt *dt)
 	if (phi->is_start_sleeping)
 		phi->is_start_sleeping = 0;
 	if (!dt->is_finish)
-	{
 		ft_display_log((time_stamp / 1000), phi->name, " is thinking\n");
-		// usleep(10);
-			// take_forks(phi, dt);
-	}
 	return (0);
 }

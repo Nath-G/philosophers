@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/26 15:58:17 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/29 11:39:57 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ static int	init_data(t_prog_dt *data)
 	data->n_meals = -1;
 	data->one_is_died = 0;
 	data->is_finish = 0;
-	data->time_to_die = data->time_to_die *1000;
-	data->time_to_eat = data->time_to_eat *1000;
-	data->time_to_sleep = data->time_to_sleep *1000;
+	data->time_to_die = data->time_to_die * 1000;
+	data->time_to_eat = data->time_to_eat * 1000;
+	data->time_to_sleep = data->time_to_sleep * 1000;
 	return (0);
 }
 
-int		init_philo(t_prog_dt *data)
+int			init_philo(t_prog_dt *data)
 {
 	int i;
 
@@ -80,7 +80,7 @@ int		init_philo(t_prog_dt *data)
 		if (!(data->philo[i].name = malloc(sizeof(char) * 10)))
 			return (ft_display_msg(MALLOC_ERROR));
 		if (!(data->philo[i].time_last_meal =
-					malloc(sizeof(struct timeval))))
+				malloc(sizeof(struct timeval))))
 			return (ft_display_msg(MALLOC_ERROR));
 		if (pthread_mutex_init(&data->philo[i].left_fork, NULL))
 			return (ft_display_msg(MUTEX_ERROR));
@@ -98,7 +98,7 @@ int		init_philo(t_prog_dt *data)
 	return (0);
 }
 
-int		init_prog(int ac, char **av, t_prog_dt *data)
+int			init_prog(int ac, char **av, t_prog_dt *data)
 {
 	if (ac != 5 && ac != 6)
 		return (ft_display_msg(ARG_NB_ERROR));
@@ -120,7 +120,7 @@ int		init_prog(int ac, char **av, t_prog_dt *data)
 	if (data->n_philo < 2)
 		return (ft_display_msg(ARG_VALUE_ERROR));
 	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) *
-					(data->n_philo))))
+			(data->n_philo))))
 		return (ft_display_msg(MALLOC_ERROR));
 	return (0);
 }

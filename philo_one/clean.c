@@ -20,11 +20,11 @@ void	philo_killer(t_prog_dt *data)
 	i = 0;
 	nb = data->n_philo;
 	if (data->n_meals != -1)
-		pthread_join(data->eats_thread,NULL);
+		pthread_join(data->eats_thread, NULL);
 	while (i < nb)
 	{
 		pthread_mutex_lock(&(data->philo[i].meal_time));
-		pthread_join(data->philo[i].thread,NULL);
+		pthread_join(data->philo[i].thread, NULL);
 		i++;
 	}
 }
@@ -34,7 +34,6 @@ void	clean_philo(t_prog_dt *data, t_param *param)
 	int			i;
 
 	i = 0;
-
 	philo_killer(data);
 	if (param)
 		free(param);
