@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.h                                        :+:      :+:    :+:   */
+/*   philo_two.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/29 11:40:02 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/30 19:01:40 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <semaphore.h>
+# include <fcntl.h> 
+# include <sys/stat.h>
 
 # define ONE_MILLISEC 1000
 # define ARG_NB_ERROR -1
@@ -25,26 +28,18 @@
 # define ARG_VALUE_ERROR -3
 # define MALLOC_ERROR -4
 # define PTHREAD_ERROR -5
-# define MUTEX_ERROR -6
+# define SEM_ERROR -6
 # define TIME_ERROR -7
 # define ARG_INIT_ERROR -8
 # define TIMESTAMP_INFO 10
-# define FORK_INFO 11
-# define EATING_INFO 12
-# define THINKING_INFO 13
-# define SLEEPING_INFO 14
 
 typedef struct		s_philo_dt
 {
 	char			*name;
 	int				id;
 	pthread_t		thread;
-	pthread_mutex_t	left_fork;
-	pthread_mutex_t	*right_fork;
 	struct timeval	*time_last_meal;
 	int				meals_ate;
-	pthread_mutex_t meal_time;
-	pthread_mutex_t finish_eaten;
 	int				is_start_sleeping;
 }					t_philo_dt;
 
@@ -61,6 +56,9 @@ typedef struct		s_prog_dt
 	int				is_finish;
 	pthread_t		eats_thread;
 	pthread_t		deaths_thread;
+	sem_t			*finish_eaten;
+	sem_t			*meal_time;
+	sem_t			*fork;
 }					t_prog_dt;
 
 typedef struct		s_param
@@ -79,6 +77,7 @@ int					init_philo(t_prog_dt *data);
 **----clean up----**
 */
 void				clean_philo(t_prog_dt *data, t_param *param);
+void				ft_post_sem(t_prog_dt *dt);
 
 /*
 **----log----**

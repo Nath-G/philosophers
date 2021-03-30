@@ -6,25 +6,28 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/30 17:36:09 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/30 19:05:06 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
-static void	take_forks(t_philo_dt *phi, t_prog_dt *dt)
+static int	take_forks(t_philo_dt *phi, t_prog_dt *dt)
 {
 	long unsigned int	time_stamp;
 	struct timeval		cur_time;
 
-	pthread_mutex_lock(&phi->left_fork);
-	pthread_mutex_lock(phi->right_fork);
+	if (sem_wait(dt->fork))
+		return (1);
+	if (sem_wait(dt->fork))
+		return (1);
 	ft_get_time(&cur_time);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 	if (!dt->is_finish)
 		ft_display_log((time_stamp / 1000), phi->name, " has taken a fork\n");
 	if (!dt->is_finish)
 		ft_display_log((time_stamp / 1000), phi->name, " has taken a fork\n");
+	return (0);
 }
 
 int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
@@ -35,21 +38,26 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	take_forks(phi, dt);
 	if (!dt->is_finish)
 	{
-		pthread_mutex_lock(&phi->meal_time);
+		if (sem_wait(dt->meal_time))
+			return (1);
 		ft_get_time(phi->time_last_meal);
 		ft_get_time(&cur_time);
 		time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 		ft_display_log((time_stamp / 1000), phi->name, " is eating\n");
-		pthread_mutex_unlock(&phi->meal_time);
+		if (sem_post(dt->meal_time))
+			return (1);
 		ft_get_time(&cur_time);
 		usleep(dt->time_to_eat
 			- ft_get_time_diff(&cur_time, phi->time_last_meal));
 		phi->meals_ate++;
-		if (phi->meals_ate >= dt->n_meals)
-			pthread_mutex_unlock(&phi->finish_eaten);
+		if (phi->meals_ate == dt->n_meals)
+			if (sem_post(dt->finish_eaten))
+					return (1);
 	}
-	pthread_mutex_unlock(&phi->left_fork);
-	pthread_mutex_unlock(phi->right_fork);
+	if (sem_post(dt->fork))
+		return (1);
+	if (sem_post(dt->fork))
+		return (1);
 	return (0);
 }
 
