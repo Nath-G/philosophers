@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:01:20 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/29 15:30:40 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/31 18:11:05 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,27 @@ int		ft_strlen(const char *str)
 	while (str[i])
 		i++;
 	return (i);
+}
+
+int		ft_check_argument_format(char **av)
+{
+	int i;
+	int j;
+
+	i = 1;
+	j = 0;
+	while (av[i])
+	{
+		j = 0;
+		while (av[i][j])
+		{
+			if (av[i][j] < '0' || av[i][j] > '9')
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
 }
 
 char	*ft_strjoinfree(char *s1, const char *s2)

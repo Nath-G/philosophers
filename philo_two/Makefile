@@ -10,7 +10,7 @@ RM	= rm -f
 
 # SRCS *********************************************************************** #
 SRCS	= main.c life_actions.c utils.c utils2.c init.c log.c clean.c \
-		monitor.c 
+		monitor.c time.c
 
 # OBJS *********************************************************************** #
 
@@ -40,7 +40,7 @@ all:		${NAME}
 
 
 clean:
-		${RM} ${OBJS} ${OBJSBONUS}
+		${RM} ${OBJS}
 
 fclean:		clean
 		${RM} ${NAME}

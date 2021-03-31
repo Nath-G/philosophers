@@ -10,7 +10,7 @@ RM	= rm -f
 
 # SRCS *********************************************************************** #
 SRCS	= main.c life_actions.c utils.c utils2.c init.c log.c clean.c \
-		monitor.c 
+		monitor.c time.c
 
 # OBJS *********************************************************************** #
 
@@ -38,9 +38,6 @@ endif
 
 all:		${NAME}
 
-bonus:		${OBJS} ${OBJSBONUS}
-		ar rc ${NAME} ${OBJS} ${OBJSBONUS} 
-
 clean:
 		${RM} ${OBJS} ${OBJSBONUS}
 
@@ -49,4 +46,4 @@ fclean:		clean
 
 re:		fclean all
 
-.PHONY:	all clean fclean re
+.PHONY:	all clean fclean re philo_one

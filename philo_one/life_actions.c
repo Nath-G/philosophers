@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/30 17:36:09 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/31 18:14:50 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ static void	take_forks(t_philo_dt *phi, t_prog_dt *dt)
 	ft_get_time(&cur_time);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 	if (!dt->is_finish)
-		ft_display_log((time_stamp / 1000), phi->name, " has taken a fork\n");
+		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
+			" has taken a fork\n");
 	if (!dt->is_finish)
-		ft_display_log((time_stamp / 1000), phi->name, " has taken a fork\n");
+		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
+			" has taken a fork\n");
 }
 
 int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
@@ -39,7 +41,7 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 		ft_get_time(phi->time_last_meal);
 		ft_get_time(&cur_time);
 		time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-		ft_display_log((time_stamp / 1000), phi->name, " is eating\n");
+		ft_display_log((time_stamp / ONE_MLSEC), phi->name, " is eating\n");
 		pthread_mutex_unlock(&phi->meal_time);
 		ft_get_time(&cur_time);
 		usleep(dt->time_to_eat
@@ -62,7 +64,7 @@ int			philo_sleeps(t_philo_dt *phi, t_prog_dt *dt)
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 	if (!dt->is_finish)
 	{
-		ft_display_log((time_stamp / 1000), phi->name, " is sleeping\n");
+		ft_display_log((time_stamp / ONE_MLSEC), phi->name, " is sleeping\n");
 		usleep(dt->time_to_sleep);
 	}
 	return (0);
@@ -78,6 +80,6 @@ int			philo_thinks(t_philo_dt *phi, t_prog_dt *dt)
 	if (phi->is_start_sleeping)
 		phi->is_start_sleeping = 0;
 	if (!dt->is_finish)
-		ft_display_log((time_stamp / 1000), phi->name, " is thinking\n");
+		ft_display_log((time_stamp / ONE_MLSEC), phi->name, " is thinking\n");
 	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 17:58:49 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/24 12:28:45 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/31 16:56:31 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-int					ft_display_msg(int msg_nb)
+int		ft_display_msg(int msg_nb)
 {
 	if (msg_nb == ARG_NB_ERROR)
 		return (ft_write_msg("Error : wrong argument number!\n", msg_nb));
@@ -26,27 +26,12 @@ int					ft_display_msg(int msg_nb)
 		return (ft_write_msg("Error : at pthread creation\n", msg_nb));
 	if (msg_nb == ARG_INIT_ERROR)
 		return (ft_write_msg("Error : at argument initialisation\n", msg_nb));
+	if (msg_nb == DATA_INIT_ERROR)
+		return (ft_write_msg("Error : at data initialisation\n", msg_nb));
 	return (0);
 }
 
-int					ft_get_time(struct timeval *time)
-{
-	if (gettimeofday(time, NULL))
-	{
-		ft_display_msg(TIME_ERROR);
-		return (1);
-	}
-	return (0);
-}
-
-unsigned long int	ft_get_time_diff(struct timeval *tm1, struct timeval *tm2)
-{
-	return ((tm1->tv_sec - tm2->tv_sec) * 1000000
-					+ (tm1->tv_usec - tm2->tv_usec));
-}
-
-void				ft_display_log(long unsigned time_stamp, char *philo_name,
-						char *msg)
+void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg)
 {
 	int				i;
 	char			*ptr;

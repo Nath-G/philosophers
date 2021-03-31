@@ -6,25 +6,21 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/03/30 18:37:53 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/31 18:01:36 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-void	ft_post_sem(t_prog_dt *dt)
+void	ft_clean_sem(t_prog_dt *data)
 {
-	int i;
-
-	i = 0;
-	while (i < dt->n_philo)
-	{
-		if (dt->philo[i].meals_ate < dt->n_meals)
-			sem_post(dt->finish_eaten);
-		i++;
-	}
+	sem_close(data->fork);
+	sem_close(data->finish_eaten);
+	sem_close(data->meal_time);
+	sem_unlink("/fork");
+	sem_unlink("/finish_eaten");
+	sem_unlink("/meal_time");
 }
-
 
 void	philo_killer(t_prog_dt *data)
 {
@@ -40,12 +36,6 @@ void	philo_killer(t_prog_dt *data)
 		pthread_join(data->philo[i].thread, NULL);
 		i++;
 	}
-	sem_close(data->fork);
-	sem_close(data->finish_eaten);
-	sem_close(data->meal_time);
-	sem_unlink("/fork");
-	sem_unlink("/finish_eaten");
-	sem_unlink("/meal_time");
 }
 
 void	clean_philo(t_prog_dt *data, t_param *param)
@@ -54,6 +44,7 @@ void	clean_philo(t_prog_dt *data, t_param *param)
 
 	i = 0;
 	philo_killer(data);
+	ft_clean_sem(data);
 	if (param)
 		free(param);
 	while (i < data->n_philo)
