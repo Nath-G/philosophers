@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/31 17:08:51 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/31 18:36:04 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@ static void	ft_death(t_prog_dt *dt, char *phi_name, struct timeval cur_time,
 
 void		*eats_checker(void *data_philo)
 {
-	t_prog_dt	*data;
-	int			i;
+	int					i;
+	t_prog_dt			*data;
+	struct timeval		cur_time;
+	unsigned long int	time_stamp;
 
 	data = (t_prog_dt *)data_philo;
 	i = 0;
@@ -35,7 +37,12 @@ void		*eats_checker(void *data_philo)
 	}
 	data->is_finish = 1;
 	if (!data->one_is_died)
-		printf("All philosophers almost ate %d times!\n", data->n_meals);
+	{
+		ft_get_time(&cur_time);
+		time_stamp = ft_get_time_diff(&cur_time, data->time_start) / ONE_MLSEC;
+		printf("%lu All philosophers almost ate %d times!\n", time_stamp,
+			data->n_meals);
+	}
 	return (NULL);
 }
 
