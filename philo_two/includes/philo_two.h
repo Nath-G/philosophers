@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/31 18:12:02 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/01 11:00:58 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct		s_param
 */
 void				clean_philo(t_prog_dt *data, t_param *param);
 void				ft_clean_sem(t_prog_dt *data);
+void				ft_post_sem(t_prog_dt *dt);
 
 /*
 **----initialisation----**

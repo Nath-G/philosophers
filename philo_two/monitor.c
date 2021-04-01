@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/31 18:36:17 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/01 11:16:32 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,5 @@ void		death_checker(t_prog_dt *dt)
 		if (i == dt->n_philo)
 			i = 0;
 	}
+	ft_post_sem(dt);
 }

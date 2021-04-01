@@ -6,11 +6,27 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/03/31 18:01:36 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/01 11:13:11 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
+
+void	ft_post_sem(t_prog_dt *dt)
+{
+	int i;
+
+	i = 0;
+	if (dt->n_meals != -1)
+	{
+		while (i < dt->n_philo)
+		{
+			if (dt->philo[i].meals_ate < dt->n_meals)
+				sem_post(dt->finish_eaten);
+			i++;
+		}
+	}
+}
 
 void	ft_clean_sem(t_prog_dt *data)
 {
