@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/01 11:00:58 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/01 15:57:23 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ void				philo_killer(t_prog_dt *data);
 int					ft_get_time(struct timeval *time);
 unsigned long int	ft_get_time_diff(struct timeval *cur_time,
 						struct timeval *time);
-int					ft_time_initialisation(t_prog_dt *data);
 
 /*
 **----utils----**

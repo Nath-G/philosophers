@@ -6,23 +6,11 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 15:24:19 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/31 17:27:02 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/01 15:54:27 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
-
-int					ft_time_initialisation(t_prog_dt *data)
-{
-	int	i;
-
-	if (gettimeofday(data->time_start, NULL))
-		return (ft_display_msg(TIME_ERROR));
-	i = -1;
-	while (++i < data->n_philo)
-		ft_get_time(data->philo[i].time_last_meal);
-	return (0);
-}
 
 int					ft_get_time(struct timeval *time)
 {
