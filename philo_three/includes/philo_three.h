@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 16:30:36 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/02 12:30:29 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/02 19:03:54 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ typedef struct		s_prog_dt
 	int				one_is_died;
 	int				is_finish;
 	pthread_t		eats_thread;
-	// pthread_t		deaths_thread;
+	pthread_t		deaths_thread;
 	sem_t			*finish_eaten;
 	sem_t			*meal_time;
-	//sem_t			*death;
+	sem_t			*death;
 	sem_t			*fork;
-	sem_t			*stop;
+	// sem_t			*stop;
 }					t_prog_dt;
 
 typedef struct		s_param
@@ -79,6 +79,7 @@ typedef struct		s_param
 void				clean_philo(t_prog_dt *data);
 void				ft_clean_sem(t_prog_dt *data);
 void				ft_post_sem(t_prog_dt *dt);
+void				ft_kill_process(t_prog_dt *data);
 
 /*
 **----initialisation----**
@@ -103,11 +104,12 @@ void				ft_display_log(long unsigned time_stamp, char *philo_name,
 /*
 **----monitoring----**
 */
-void				death_checker(t_prog_dt *dt);
-// void				*death_checker(void *param);
-void				*eats_checker(void *data);
-void				philo_killer(t_prog_dt *data);
 
+// void				death_checker(t_prog_dt *dt);
+void				*death_checker(void *param);
+//void				*eats_checker(void *data);
+void				philo_killer(t_prog_dt *data);
+int					monitor(t_prog_dt *data);
 /*
 **----time----**
 */

@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/02 12:25:44 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/02 16:21:04 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ static int	ft_init_sem(t_prog_dt *data)
 	sem_unlink("/finish_eaten");
 	data->finish_eaten = sem_open("/finish_eaten", O_CREAT | O_TRUNC, S_IRWXU,
 		data->n_philo);
+	sem_unlink("/death");
+	data->death = sem_open("/death", O_CREAT | O_TRUNC
+		| O_RDWR, S_IRWXU, 1);
 	if (data->finish_eaten == SEM_FAILED || data->fork == SEM_FAILED
-		|| data->meal_time == SEM_FAILED)
+		|| data->meal_time == SEM_FAILED || data->death == SEM_FAILED)
 	{
 		ft_clean_sem(data);
 		return (SEM_ERROR);
@@ -35,6 +38,7 @@ static int	ft_init_sem(t_prog_dt *data)
 	if (data->n_meals != -1)
 		while (++i < data->n_philo)
 			sem_wait(data->finish_eaten);
+	sem_wait(data->death);
 	return (0);
 }
 

@@ -6,11 +6,25 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/02 12:33:02 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/02 19:23:58 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
+
+void	ft_kill_process(t_prog_dt *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->n_philo)
+	{
+		pthread_join(data->philo[i].death_thread, NULL);
+		kill(data->philo[i].pid, SIGKILL);
+		i++;
+	}
+}
+	
 
 void	ft_post_sem(t_prog_dt *dt)
 {
@@ -30,31 +44,25 @@ void	ft_post_sem(t_prog_dt *dt)
 
 void	ft_clean_sem(t_prog_dt *data)
 {
+	ft_post_sem(data);
 	sem_close(data->fork);
 	sem_close(data->finish_eaten);
 	sem_close(data->meal_time);
-//	sem_close(data->death);
+	sem_close(data->death);
 	sem_unlink("/fork");
 	sem_unlink("/finish_eaten");
 	sem_unlink("/meal_time");
-//	sem_unlink("/death");
+	sem_unlink("/death");
 }
 
 void	philo_killer(t_prog_dt *data)
 {
-	int	i;
 	int	nb;
 
 	nb = data->n_philo;
 	if (data->n_meals != -1)
 		pthread_join(data->eats_thread, NULL);
-	i = 0;
-	while (i < nb)
-	{
-		kill(data->philo[i].pid, SIGKILL);
-		pthread_join(data->philo[i].death_thread, NULL);//il y a des d'autres choses à faire 
-		i++;
-	}
+	pthread_join(data->deaths_thread, NULL);
 }
 
 void	clean_philo(t_prog_dt *data)//, t_param *param)
