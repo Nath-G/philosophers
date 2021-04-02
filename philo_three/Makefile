@@ -1,57 +1,35 @@
 
 # NAME - COMPLIATOR - FLAGGS -LIBFT ****************************************** #
+
 NAME	= philo_three
-OS = $(shell uname)
-CC	= gcc
-CC_L	= clang
-CFLAGS	= -Wall -Wextra -Werror -I./includes
-RM	= rm -f
-#-fsanitize=address
+CC		= clang
+CFLAGS	= -Wall -Wextra -Werror -g3 -I./includes
+RM		= rm -f
 
 # SRCS *********************************************************************** #
-SRCS	= main.c \
+
+SRCS	= main.c life_actions.c utils.c utils2.c init.c log.c clean.c \
+		  monitor.c time.c
 
 # OBJS *********************************************************************** #
 
 OBJS	=	${SRCS:.c=.o}
 
-
 # RULES ********************************************************************** #
-.c.o:
-
-ifeq (${OS}, Darwin)
-            $(CC) $(CFLAGS) -c $< -o $@
-
-else
-			$(CC_L) $(CFLAGS) -c $< -o $@
-endif
+ .c.o:
+			$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	${OBJS}
-		#	make all -C ./lib/minilibx
-		#	make all -C ./lib/libft
-
-ifeq (${OS}, Darwin)
-			$(CC) $(FLAGS) $(MLX) $(OBJS) -o $(NAME)
-else
-			$(CC_L) -lpthread $(FLAGS) -o $(NAME) $(OBJS) 
-
-endif
+			$(CC) -lpthread $(FLAGS) -o $(NAME) $(OBJS)
 
 all:		${NAME}
 
-bonus:		${OBJS} ${OBJSBONUS}
-			ar rc ${NAME} ${OBJS} ${OBJSBONUS} 
-
 clean:
-	#		make clean -C ./lib/minilibx 
-	#		make clean -C ./lib/libft
-			${RM} ${OBJS} ${OBJSBONUS}
+			${RM} ${OBJS}
 
 fclean:		clean
-		#	make fclean -C ./lib/libft
-		#	make fclean -C ./lib/minilibx
 			${RM} ${NAME}
 
 re:			fclean all
 
-.PHONY:	all clean fclean re
+.PHONY:		all clean fclean re philo_three
