@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/02 19:44:49 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/07 19:39:58 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ static int	philo_life(t_param *param, t_philo_dt *phi)
 {
 	int			i;
 	t_prog_dt	*data;
+	pthread_t	death_thread;
 
 	data = param->data;
-//	pthread_detach(phi->death_thread);
-	if (pthread_create(&(phi->death_thread), NULL, death_checker, param) < 0)
-			return (ft_display_msg(PTHREAD_ERROR));
+	death_thread = 0;
+	if (pthread_create(&(death_thread), NULL, death_checker, param) < 0)
+			return (ft_display_msg(PTHREAD_ERROR));//essayer de mettre le thread dans la structure et ajouter le join dans le clean
+	pthread_detach(death_thread);
 	i = 0;
 	while (!data->is_finish)
 	{
@@ -29,8 +31,7 @@ static int	philo_life(t_param *param, t_philo_dt *phi)
 		philo_sleeps(phi, data);
 		philo_thinks(phi, data);
 	}
-	printf("ph %s join ?\n", phi->name);
-	pthread_join(phi->death_thread, NULL);//il y a des d'autres choses à faire 
+	printf("thread philo %s\n", phi->name);
 	return (0);
 }
 
@@ -73,6 +74,7 @@ int			main(int ac, char **av)
 	}
 	monitor(&data);
 	launch_philo(&data);
+	sem_wait(data.finish);
 	clean_philo(&data);
 	return (0);
 }

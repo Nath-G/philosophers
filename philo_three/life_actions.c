@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/02 16:25:35 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/07 18:21:41 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	long unsigned	time_stamp;
 
 	take_forks(phi, dt);
-	if (sem_wait(dt->meal_time))
+	if (sem_wait(phi->meal_time))
 		return (1);
 	ft_get_time(phi->time_last_meal);
 	ft_get_time(&cur_time);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 	if (!dt->is_finish)
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name, " is eating\n");
-	if (sem_post(dt->meal_time))
+	if (sem_post(phi->meal_time))
 		return (1);
 	ft_get_time(&cur_time);
 	usleep(dt->time_to_eat - ft_get_time_diff(&cur_time, phi->time_last_meal));

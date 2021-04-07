@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/02 16:21:04 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/07 18:22:15 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ static int	ft_init_sem(t_prog_dt *data)
 	i = 0;
 	sem_unlink("/fork");
 	data->fork = sem_open("/fork", O_CREAT | O_TRUNC, S_IRWXU, data->n_philo);
-	sem_unlink("/meal_time");
-	data->meal_time = sem_open("/meal_time", O_CREAT | O_TRUNC
-		| O_RDWR, S_IRWXU, 1);
+	// sem_unlink("/meal_time");
+	// data->meal_time = sem_open("/meal_time", O_CREAT | O_TRUNC
+	// 	| O_RDWR, S_IRWXU, 1);
 	sem_unlink("/finish_eaten");
 	data->finish_eaten = sem_open("/finish_eaten", O_CREAT | O_TRUNC, S_IRWXU,
 		data->n_philo);
-	sem_unlink("/death");
-	data->death = sem_open("/death", O_CREAT | O_TRUNC
+	sem_unlink("/finish");
+	data->finish = sem_open("/finish", O_CREAT | O_TRUNC
 		| O_RDWR, S_IRWXU, 1);
-	if (data->finish_eaten == SEM_FAILED || data->fork == SEM_FAILED
-		|| data->meal_time == SEM_FAILED || data->death == SEM_FAILED)
+	if (data->finish_eaten == SEM_FAILED || data->fork == SEM_FAILED //|| data->meal_time == SEM_FAILED 
+		|| data->finish == SEM_FAILED)
 	{
 		ft_clean_sem(data);
 		return (SEM_ERROR);
@@ -38,7 +38,7 @@ static int	ft_init_sem(t_prog_dt *data)
 	if (data->n_meals != -1)
 		while (++i < data->n_philo)
 			sem_wait(data->finish_eaten);
-	sem_wait(data->death);
+	sem_wait(data->finish);
 	return (0);
 }
 
@@ -53,6 +53,15 @@ static int	ft_init_philo_data(t_prog_dt *data)
 		fill_nbr(data->philo[i].id, data->philo[i].name);
 		data->philo[i].meals_ate = 0;
 		data->philo[i].is_start_sleeping = 0;
+		data->philo[i].is_died = 0;
+		sem_unlink(data->philo[i].name);
+		data->philo[i].meal_time = sem_open(data->philo[i].name, O_CREAT | O_TRUNC
+		| O_RDWR, S_IRWXU, 1);
+		if ( data->philo[i].meal_time == SEM_FAILED)
+		{
+			ft_clean_sem(data);
+			return (SEM_ERROR);
+		}
 		i++;
 	}
 	i = 0;

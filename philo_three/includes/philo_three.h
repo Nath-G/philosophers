@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 16:30:36 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/02 19:03:54 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/07 18:20:38 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,11 @@ typedef struct		s_philo_dt
 	char			*name;
 	int				id;
 //	pthread_t		thread;
-	pthread_t		death_thread;
+//	pthread_t		death_thread;
+	int				is_died;
 	struct timeval	*time_last_meal;
 	int				meals_ate;
+	sem_t			*meal_time;
 	int				is_start_sleeping;
 }					t_philo_dt;
 
@@ -61,10 +63,8 @@ typedef struct		s_prog_dt
 	pthread_t		eats_thread;
 	pthread_t		deaths_thread;
 	sem_t			*finish_eaten;
-	sem_t			*meal_time;
-	sem_t			*death;
 	sem_t			*fork;
-	// sem_t			*stop;
+	sem_t			*finish;
 }					t_prog_dt;
 
 typedef struct		s_param
