@@ -10,4 +10,4 @@
 ```backtrace```
 ```valgrind --leak-check=yes ./philo_one 3 5000 300 300 4```
 
-
+usleep( 5 * ((phi->id + 1) % 2));
