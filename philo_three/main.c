@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/07 19:39:58 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/08 13:58:32 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ static int	philo_life(t_param *param, t_philo_dt *phi)
 	death_thread = 0;
 	if (pthread_create(&(death_thread), NULL, death_checker, param) < 0)
 			return (ft_display_msg(PTHREAD_ERROR));//essayer de mettre le thread dans la structure et ajouter le join dans le clean
-	pthread_detach(death_thread);
+
 	i = 0;
-	while (!data->is_finish)
+	while (!data->is_finish && !data->one_is_died)
 	{
 		if (!phi->is_start_sleeping)
 			philo_eats(phi, data);
 		philo_sleeps(phi, data);
 		philo_thinks(phi, data);
 	}
-	printf("thread philo %s\n", phi->name);
+	pthread_join(death_thread, NULL);
 	return (0);
 }
 
@@ -74,7 +74,7 @@ int			main(int ac, char **av)
 	}
 	monitor(&data);
 	launch_philo(&data);
-	sem_wait(data.finish);
+	//sem_wait(data.finish);
 	clean_philo(&data);
 	return (0);
 }

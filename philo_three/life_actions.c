@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/07 18:21:41 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/08 13:28:13 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ static int	take_forks(t_philo_dt *phi, t_prog_dt *dt)
 	if (sem_wait(dt->fork))
 		return (1);
 	ft_get_time(&cur_time);
-	if (!dt->is_finish)
+	if (!dt->is_finish && !dt->one_is_died)
 	{
 		time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
 			" has taken a fork\n");
 	}
-	if (!dt->is_finish)
+	if (!dt->is_finish && !dt->one_is_died)
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
 			" has taken a fork\n");
 	return (0);
@@ -45,7 +45,7 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	ft_get_time(phi->time_last_meal);
 	ft_get_time(&cur_time);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-	if (!dt->is_finish)
+	if (!dt->is_finish && !dt->one_is_died)
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name, " is eating\n");
 	if (sem_post(phi->meal_time))
 		return (1);
@@ -70,7 +70,7 @@ int			philo_sleeps(t_philo_dt *phi, t_prog_dt *dt)
 	if (phi->is_start_sleeping)
 		phi->is_start_sleeping = 0;
 	ft_get_time(&cur_time);
-	if (!dt->is_finish)
+	if (!dt->is_finish && !dt->one_is_died)
 	{
 		time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name, " is sleeping\n");
@@ -85,7 +85,7 @@ int			philo_thinks(t_philo_dt *phi, t_prog_dt *dt)
 	long unsigned	time_stamp;
 
 	ft_get_time(&cur_time);
-	if (!dt->is_finish)
+	if (!dt->is_finish && !dt->one_is_died)
 	{
 		time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name, " is thinking\n");
