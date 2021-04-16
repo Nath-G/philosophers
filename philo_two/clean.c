@@ -6,19 +6,31 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/01 11:13:11 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/16 14:09:23 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
+
+static void	ft_clean_sem_phi(char *sem_name, int phi, t_prog_dt	*data)
+{
+	sem_close(data->philo[phi].meal_time);
+	sem_unlink(sem_name);
+}
 
 void	ft_post_sem(t_prog_dt *dt)
 {
 	int i;
 
 	i = 0;
+	while (i < (dt->n_philo / 2 + 1))
+	{
+		sem_post(dt->fork);
+		i++;
+	}
 	if (dt->n_meals != -1)
 	{
+		i = 0;
 		while (i < dt->n_philo)
 		{
 			if (dt->philo[i].meals_ate < dt->n_meals)
@@ -30,12 +42,20 @@ void	ft_post_sem(t_prog_dt *dt)
 
 void	ft_clean_sem(t_prog_dt *data)
 {
+	int i;
+
+	i = 0;
+		while(i < data->n_philo)
+	{
+		ft_clean_sem_phi("/meal_time", i, data);
+		i++;
+	}
 	sem_close(data->fork);
 	sem_close(data->finish_eaten);
-	sem_close(data->meal_time);
+	sem_close(data->msg);
 	sem_unlink("/fork");
 	sem_unlink("/finish_eaten");
-	sem_unlink("/meal_time");
+	sem_unlink("/msg");
 }
 
 void	philo_killer(t_prog_dt *data)

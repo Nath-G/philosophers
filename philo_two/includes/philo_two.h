@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/01 15:57:23 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/16 14:07:32 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct		s_philo_dt
 	struct timeval	*time_last_meal;
 	int				meals_ate;
 	int				is_start_sleeping;
+	sem_t			*meal_time;
 }					t_philo_dt;
 
 typedef struct		s_prog_dt
@@ -58,7 +59,7 @@ typedef struct		s_prog_dt
 	pthread_t		eats_thread;
 	pthread_t		deaths_thread;
 	sem_t			*finish_eaten;
-	sem_t			*meal_time;
+	sem_t			*msg;
 	sem_t			*fork;
 }					t_prog_dt;
 
@@ -120,5 +121,6 @@ int					ft_atoi(char *str, int *nb);
 void				fill_nbr(int nbr, char *ptr);
 void				fill_lunbr(long unsigned nbr, char *ptr);
 char				*ft_strjoinfree(char *s1, const char *s2);
+char			*ft_sem_name(char *sem_name, char *phi_name);
 
 #endif

@@ -6,12 +6,26 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/01 16:00:19 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/16 13:47:09 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
+static int	ft_init_sem_phi(char *sem_name, int phi, t_prog_dt	*data)
+{
+	sem_unlink(sem_name);
+	data->philo[phi].meal_time = sem_open(sem_name, O_CREAT | O_TRUNC
+	| O_RDWR, S_IRWXU, 1);
+	if (data->philo[phi].meal_time == SEM_FAILED)
+		return (SEM_ERROR);
+	return (0);
+}
+// static void	ft_clean_sem_phi(char *sem_name, int phi, t_prog_dt	*data)
+// {
+// 	sem_close(data->philo[phi].meal_time);
+// 	sem_unlink(sem_name);
+// }
 static void	*philo_life(void *param)
 {
 	int			i;
@@ -45,13 +59,28 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 	i = 0;
 	while (i < data->n_philo && param && data)
 	{
+	//	printf("ok0 phi %s\n", data->philo[i].name);
+		if (ft_init_sem_phi("/meal_time", i, data))
+			return (ft_display_msg(SEM_ERROR));
+	//	printf("ok1 phi %s\n", data->philo[i].name);
 		param[i].data = data;
+	//	printf("ok2 phi %s\n", data->philo[i].name);
 		param[i].philo_dt = &data->philo[i];
+	//	printf("ok3 phi %s\n", data->philo[i].name);
 		if (pthread_create(&(data->philo[i].thread), NULL, philo_life,
 				&param[i]) < 0)
 			return (ft_display_msg(PTHREAD_ERROR));
 		i++;
 	}
+	//close sem
+//	printf("ok7 phi %s\n", data->philo[i].name);
+//	i = 0;
+	// while(i < data->n_philo)
+	// {
+	// 	ft_clean_sem_phi("/meal_time", i, data);
+	// 	i++;
+	// }
+//	printf("ok8 phi %s\n", data->philo[i].name);
 	return (0);
 }
 

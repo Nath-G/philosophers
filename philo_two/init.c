@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/01 16:13:23 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/16 14:23:28 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,15 @@ static int	ft_init_sem(t_prog_dt *data)
 	int	i;
 
 	i = 0;
-	sem_unlink("/fork");
-	data->fork = sem_open("/fork", O_CREAT | O_TRUNC, S_IRWXU, data->n_philo);
-	sem_unlink("/meal_time");
-	data->meal_time = sem_open("/meal_time", O_CREAT | O_TRUNC
-		| O_RDWR, S_IRWXU, 1);
+	sem_unlink(ft_sem_name("/fork", ""));
+	data->fork = sem_open(ft_sem_name("/fork", ""), O_CREAT | O_EXCL, O_RDWR, data->n_philo);
+	sem_unlink("/msg");
+	data->msg = sem_open("/msg", O_CREAT | O_EXCL, O_RDWR, 1);
 	sem_unlink("/finish_eaten");
-	data->finish_eaten = sem_open("/finish_eaten", O_CREAT | O_TRUNC, S_IRWXU,
+	data->finish_eaten = sem_open("/finish_eaten", O_CREAT | O_EXCL, O_RDWR,
 		data->n_philo);
 	if (data->finish_eaten == SEM_FAILED || data->fork == SEM_FAILED
-		|| data->meal_time == SEM_FAILED)
+		|| data->msg == SEM_FAILED)
 	{
 		ft_clean_sem(data);
 		return (SEM_ERROR);
@@ -58,6 +57,7 @@ static int	ft_init_philo_data(t_prog_dt *data)
 			data->philo[i].is_start_sleeping = 1;
 		i++;
 	}
+	
 	return (0);
 }
 
