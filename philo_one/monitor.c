@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/31 18:36:04 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/16 20:39:42 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static void	ft_death(t_prog_dt *dt, char *phi_name, struct timeval cur_time,
 	dt->is_finish = 1;
 	dt->one_is_died = 1;
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-	ft_display_log((time_stamp / ONE_MLSEC), phi_name, " died\n");
+	ft_display_log((time_stamp / ONE_MLSEC), phi_name, " died\n",
+		&(dt->output_protection));
 }
 
 void		*eats_checker(void *data_philo)
@@ -39,9 +40,12 @@ void		*eats_checker(void *data_philo)
 	if (!data->one_is_died)
 	{
 		ft_get_time(&cur_time);
-		time_stamp = ft_get_time_diff(&cur_time, data->time_start) / ONE_MLSEC;
-		printf("%lu All philosophers almost ate %d times!\n", time_stamp,
-			data->n_meals);
+		time_stamp = ft_get_time_diff(&cur_time, data->time_start);
+		usleep(5);
+		ft_display_log((time_stamp / ONE_MLSEC), "all philos", " have eaten\n",
+		&(data->output_protection));
+		//printf("%lu All philosophers almost ate %d times!\n", time_stamp,
+		//	data->n_meals);
 	}
 	return (NULL);
 }

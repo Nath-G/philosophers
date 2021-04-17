@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/03/29 19:50:48 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/16 18:27:54 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,16 @@ void	clean_philo(t_prog_dt *data, t_param *param)
 		free(param);
 	while (i < data->n_philo)
 	{
-		pthread_mutex_destroy(&data->philo[i].left_fork);
-		pthread_mutex_destroy(&data->philo[i].finish_eaten);
-		pthread_mutex_destroy(&data->philo[i].meal_time);
+		pthread_mutex_destroy(&(data->philo[i].left_fork));
+		pthread_mutex_destroy(&(data->philo[i].finish_eaten));
+		pthread_mutex_destroy(&(data->philo[i].meal_time));
 		if (data->philo[i].name)
 			free(data->philo[i].name);
 		if (data->philo[i].time_last_meal)
 			free(data->philo[i].time_last_meal);
 		i++;
 	}
+	pthread_mutex_destroy(&(data->output_protection));
 	if (data->time_start)
 		free(data->time_start);
 	if (data->philo)

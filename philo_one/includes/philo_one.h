@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/01 15:56:17 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/16 18:13:04 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct		s_philo_dt
 	struct timeval	*time_last_meal;
 	int				meals_ate;
 	pthread_mutex_t meal_time;
-	pthread_mutex_t finish_eaten;
+	pthread_mutex_t finish_eaten;//meals_nb_reached
 	int				is_start_sleeping;
 }					t_philo_dt;
 
@@ -57,7 +57,9 @@ typedef struct		s_prog_dt
 	int				one_is_died;
 	int				is_finish;
 	pthread_t		eats_thread;
-	pthread_t		deaths_thread;
+	pthread_mutex_t output_protection;
+//	pthread_t		deaths_thread;
+
 }					t_prog_dt;
 
 typedef struct		s_param
@@ -90,7 +92,7 @@ int					philo_thinks(t_philo_dt *phi, t_prog_dt *data);
 */
 int					ft_display_msg(int msg_nb);
 void				ft_display_log(long unsigned time_stamp, char *philo_name,
-						char *msg);
+						char *msg, pthread_mutex_t *output_protection);
 /*
 **----monitoring----**
 */
