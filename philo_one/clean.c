@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/16 18:27:54 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/18 20:00:48 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	philo_killer(t_prog_dt *data)
 	while (i < nb)
 	{
 		pthread_mutex_lock(&(data->philo[i].meal_time));
+		pthread_join(data->philo[i].death_thread, NULL);
 		pthread_join(data->philo[i].thread, NULL);
 		i++;
 	}
@@ -62,6 +63,7 @@ void	clean_philo(t_prog_dt *data, t_param *param)
 		i++;
 	}
 	pthread_mutex_destroy(&(data->output_protection));
+	pthread_mutex_destroy(&(data->finish_lock));
 	if (data->time_start)
 		free(data->time_start);
 	if (data->philo)

@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/03/31 17:08:51 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/18 19:56:18 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,10 @@ int			init_prog(int ac, char **av, t_prog_dt *data)
 	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) *
 			(data->n_philo))))
 		return (ft_display_msg(MALLOC_ERROR));
+	if (pthread_mutex_init(&data->output_protection, NULL))
+			return (ft_display_msg(MUTEX_ERROR));
+	if (pthread_mutex_init(&data->finish_lock, NULL))
+			return (ft_display_msg(MUTEX_ERROR));
+	pthread_mutex_lock(&data->finish_lock);
 	return (0);
 }
