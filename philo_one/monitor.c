@@ -39,12 +39,12 @@ void		*eats_checker(void *data_philo)
 		++i;
 		if (i == data->n_philo && !data->one_is_died)
 		{
-		data->is_finish = 1;
-		ft_get_time(&cur_time);
-		time_stamp = ft_get_time_diff(&cur_time, data->time_start);
-		ft_display_log((time_stamp / ONE_MLSEC), "all philos", " have eaten\n",
-		&(data->output_protection));
-		pthread_mutex_unlock(&data->finish_lock);
+			data->is_finish = 1;
+			ft_get_time(&cur_time);
+			time_stamp = ft_get_time_diff(&cur_time, data->time_start);
+			ft_display_log((time_stamp / ONE_MLSEC), "all philos",
+				" have eaten\n", &(data->output_protection));
+			pthread_mutex_unlock(&data->finish_lock);
 		}
 	}
 	return (NULL);
@@ -57,8 +57,8 @@ void		*death_checker(void *data)
 	unsigned long int	time_stamp;
 	struct timeval		cur_time;
 	t_prog_dt			*dt;
+
 	i = 0;
-	
 	dt = (t_prog_dt *)data;
 	phi = dt->philo;
 	while (!dt->is_finish || !dt->is_finish)
@@ -69,8 +69,8 @@ void		*death_checker(void *data)
 		if ((time_stamp) > dt->time_to_die)
 		{
 			ft_death(dt, phi, cur_time, time_stamp);
-			break;
-		}	
+			break ;
+		}
 		pthread_mutex_unlock(&(phi->meal_time));
 		usleep(10);
 	}

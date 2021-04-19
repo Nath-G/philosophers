@@ -12,13 +12,13 @@
 
 #include "philo_two.h"
 
-static void	ft_clean_sem_phi(char *sem_name, int phi, t_prog_dt	*data)
+static void	ft_clean_sem_phi(char *sem_name, int phi, t_prog_dt *data)
 {
 	sem_close(data->philo[phi].meal_time);
 	sem_unlink(sem_name);
 }
 
-void	ft_post_sem(t_prog_dt *dt)
+void		ft_post_sem(t_prog_dt *dt)
 {
 	int i;
 
@@ -40,12 +40,12 @@ void	ft_post_sem(t_prog_dt *dt)
 	}
 }
 
-void	ft_clean_sem(t_prog_dt *data)
+void		ft_clean_sem(t_prog_dt *data)
 {
 	int i;
 
 	i = 0;
-		while(i < data->n_philo)
+	while (i < data->n_philo)
 	{
 		ft_clean_sem_phi("/meal_time", i, data);
 		i++;
@@ -58,7 +58,7 @@ void	ft_clean_sem(t_prog_dt *data)
 	sem_unlink("/msg");
 }
 
-void	philo_killer(t_prog_dt *data)
+void		philo_killer(t_prog_dt *data)
 {
 	int	i;
 	int	nb;
@@ -74,9 +74,9 @@ void	philo_killer(t_prog_dt *data)
 	}
 }
 
-void	clean_philo(t_prog_dt *data, t_param *param)
+void		clean_philo(t_prog_dt *data, t_param *param)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	philo_killer(data);

@@ -42,7 +42,7 @@ typedef struct		s_philo_dt
 	struct timeval	*time_last_meal;
 	int				meals_ate;
 	pthread_mutex_t meal_time;
-	pthread_mutex_t finish_eaten;//is_finish
+	pthread_mutex_t finish_eaten;
 	int				is_start_sleeping;
 }					t_philo_dt;
 

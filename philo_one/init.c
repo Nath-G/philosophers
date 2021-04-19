@@ -38,6 +38,16 @@ static int	ft_init_philo_data(t_prog_dt *data)
 	return (0);
 }
 
+static int	init_data_mutex(t_prog_dt *data)
+{
+	if (pthread_mutex_init(&data->output_protection, NULL))
+		return (ft_display_msg(MUTEX_ERROR));
+	if (pthread_mutex_init(&data->finish_lock, NULL))
+		return (ft_display_msg(MUTEX_ERROR));
+	pthread_mutex_lock(&data->finish_lock);
+	return (0);
+}
+
 static int	init_data(t_prog_dt *data)
 {
 	data->n_meals = -1;
@@ -101,10 +111,7 @@ int			init_prog(int ac, char **av, t_prog_dt *data)
 	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) *
 			(data->n_philo))))
 		return (ft_display_msg(MALLOC_ERROR));
-	if (pthread_mutex_init(&data->output_protection, NULL))
-			return (ft_display_msg(MUTEX_ERROR));
-	if (pthread_mutex_init(&data->finish_lock, NULL))
-			return (ft_display_msg(MUTEX_ERROR));
-	pthread_mutex_lock(&data->finish_lock);
+	if (init_data_mutex(data))
+		return (ft_display_msg(MUTEX_ERROR));
 	return (0);
 }
