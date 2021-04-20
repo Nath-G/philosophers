@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/16 14:09:23 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/20 19:01:29 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,16 @@
 static void	ft_clean_sem_phi(char *sem_name, int phi, t_prog_dt *data)
 {
 	sem_close(data->philo[phi].meal_time);
-	sem_unlink(sem_name);
+	sem_unlink(ft_sem_name(sem_name, data->philo[phi].name));
 }
+
 
 void		ft_post_sem(t_prog_dt *dt)
 {
 	int i;
 
 	i = 0;
-	while (i < (dt->n_philo / 2 + 1))
+	while (i < dt->n_philo)
 	{
 		sem_post(dt->fork);
 		i++;
@@ -38,7 +39,12 @@ void		ft_post_sem(t_prog_dt *dt)
 			i++;
 		}
 	}
+	i = -1;
+	while (++i < dt->n_philo * 5)
+		sem_post(dt->log_lock);
+	// ft_post_sem(dt->l_lock);
 }
+
 
 void		ft_clean_sem(t_prog_dt *data)
 {
@@ -47,36 +53,41 @@ void		ft_clean_sem(t_prog_dt *data)
 	i = 0;
 	while (i < data->n_philo)
 	{
-		ft_clean_sem_phi("/meal_time", i, data);
+		ft_clean_sem_phi("/ml_time", i, data);
 		i++;
 	}
 	sem_close(data->fork);
 	sem_close(data->finish_eaten);
-	sem_close(data->msg);
+	sem_close(data->log_lock);
+	sem_close(data->end_lock);
 	sem_unlink("/fork");
 	sem_unlink("/finish_eaten");
-	sem_unlink("/msg");
+	sem_unlink("/log_lck");
+	sem_unlink("/end_lck");
 }
 
-void		philo_killer(t_prog_dt *data)
+void	philo_killer(t_prog_dt *data)
 {
 	int	i;
 	int	nb;
 
+	i = 0;
 	nb = data->n_philo;
+	ft_post_sem(data);
 	if (data->n_meals != -1)
 		pthread_join(data->eats_thread, NULL);
-	i = 0;
 	while (i < nb)
 	{
+		pthread_join(data->philo[i].death_thread, NULL);
 		pthread_join(data->philo[i].thread, NULL);
 		i++;
 	}
+	// ft_clean_sem(data);
 }
 
-void		clean_philo(t_prog_dt *data, t_param *param)
+void	clean_philo(t_prog_dt *data, t_param *param)
 {
-	int	i;
+	int			i;
 
 	i = 0;
 	philo_killer(data);

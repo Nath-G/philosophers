@@ -6,12 +6,12 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/20 17:44:02 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/16 14:07:32 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef philo_two_H
-# define philo_two_H
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -29,7 +29,6 @@
 # define ARG_VALUE_ERROR -3
 # define MALLOC_ERROR -4
 # define PTHREAD_ERROR -5
-# define MUTEX_ERROR -6 //a enlever
 # define SEM_ERROR -6
 # define TIME_ERROR -7
 # define ARG_INIT_ERROR -8
@@ -40,13 +39,10 @@ typedef struct		s_philo_dt
 	char			*name;
 	int				id;
 	pthread_t		thread;
-	pthread_t		death_thread;
-	// pthread_mutex_t	left_fork;
-	// pthread_mutex_t	*right_fork;
 	struct timeval	*time_last_meal;
 	int				meals_ate;
-	sem_t			*meal_time;
 	int				is_start_sleeping;
+	sem_t			*meal_time;
 }					t_philo_dt;
 
 typedef struct		s_prog_dt
@@ -61,9 +57,9 @@ typedef struct		s_prog_dt
 	int				one_is_died;
 	int				is_finish;
 	pthread_t		eats_thread;
-	sem_t			*log_lock;
-	sem_t			*end_lock;
-	sem_t 			*finish_eaten;
+	pthread_t		deaths_thread;
+	sem_t			*finish_eaten;
+	sem_t			*msg;
 	sem_t			*fork;
 }					t_prog_dt;
 
@@ -77,18 +73,14 @@ typedef struct		s_param
 **----clean up----**
 */
 void				clean_philo(t_prog_dt *data, t_param *param);
-// void				ft_unlock_mutex(t_prog_dt *dt);
 void				ft_clean_sem(t_prog_dt *data);
+void				ft_post_sem(t_prog_dt *dt);
+
 /*
 **----initialisation----**
 */
 int					init_prog(int ac, char **av, t_prog_dt *data);
 int					init_philo(t_prog_dt *data);
-
-int					ft_init_sem_phi(char *sem_name, int phi, t_prog_dt	*data);
-char				*ft_sem_name(char *sem_name, char *phi_name);
-int					init_data_sem(t_prog_dt *data);
-
 
 /*
 **----liffe actions----**
@@ -102,11 +94,12 @@ int					philo_thinks(t_philo_dt *phi, t_prog_dt *data);
 */
 int					ft_display_msg(int msg_nb);
 void				ft_display_log(long unsigned time_stamp, char *philo_name,
-						char *msg, sem_t *log_lock);
+						char *msg);
+
 /*
 **----monitoring----**
 */
-void				*death_checker(void *data);
+void				death_checker(t_prog_dt *data);
 void				*eats_checker(void *data);
 void				philo_killer(t_prog_dt *data);
 
@@ -128,5 +121,6 @@ int					ft_atoi(char *str, int *nb);
 void				fill_nbr(int nbr, char *ptr);
 void				fill_lunbr(long unsigned nbr, char *ptr);
 char				*ft_strjoinfree(char *s1, const char *s2);
+char			*ft_sem_name(char *sem_name, char *phi_name);
 
 #endif

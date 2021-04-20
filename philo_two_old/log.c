@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 17:58:49 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/20 16:56:56 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/03/31 16:56:04 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,12 @@ int		ft_display_msg(int msg_nb)
 		return (ft_write_msg("Error : at pthread creation\n", msg_nb));
 	if (msg_nb == ARG_INIT_ERROR)
 		return (ft_write_msg("Error : at argument initialisation\n", msg_nb));
-	if (msg_nb == DATA_INIT_ERROR)
-		return (ft_write_msg("Error : at data initialisation\n", msg_nb));
+	if (msg_nb == SEM_ERROR)
+		return (ft_write_msg("Error : at semaphore opening\n", msg_nb));
 	return (0);
 }
 
-void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
-		sem_t *log_lock)
+void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg)
 {
 	int				i;
 	char			*ptr;
@@ -53,12 +52,6 @@ void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
 	str = ft_strjoinfree(ptr, " ");
 	str = ft_strjoinfree(str, philo_name);
 	str = ft_strjoinfree(str, msg);
-	sem_wait(log_lock);
-//	pthread_mutex_lock(log_lock);
 	write(1, str, ft_strlen(str));
 	free(str);
-	if ((msg[1] == 'i') || (msg[1] == 'h' && msg[3] == 's'))
-		sem_post(log_lock);
-//	pthread_mutex_unlock(log_lock);
-	
 }
