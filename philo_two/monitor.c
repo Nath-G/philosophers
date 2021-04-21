@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/21 13:33:51 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/21 18:27:25 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	ft_death(t_prog_dt *dt, t_philo_dt *phi, struct timeval cur_time,
 	sem_post(dt->end_lock);
 	//if (sem_post(dt->end_lock))
 	//	return (1);
-	usleep(10);
+//	usleep(10);
 	//pthread_join(phi->death_thread, NULL);
 	return (0);
 }
@@ -67,20 +67,27 @@ void		*death_checker(void *data)
 	i = 0;
 	dt = (t_prog_dt *)data;
 	phi = dt->philo;
-	while (!dt->is_finish)
+	//printf("death checker spread mort phi %s = %lu\n", phi->name, phi->death_thread);
+	while (!dt->is_finish && i < dt->n_philo)
 	{
-		if (sem_wait(phi->meal_time))
+		usleep(100);
+		//printf("ok death philo %s\n", dt->philo[i].name);
+		if (sem_wait(dt->philo[i].meal_time))
 			return (NULL);
+		
 		ft_get_time(&cur_time);
-		time_stamp = ft_get_time_diff(&cur_time, phi->time_last_meal);
+		time_stamp = ft_get_time_diff(&cur_time, dt->philo[i].time_last_meal);
+	//	printf("ok2 death philo %s\n", dt->philo[i].name);
 		if ((time_stamp) > dt->time_to_die)
 		{
-			ft_death(dt, phi, cur_time, time_stamp);
+			ft_death(dt, &(dt->philo[i]), cur_time, time_stamp);
 			break ;
 		}
-		if (sem_post(phi->meal_time))
+		if (sem_post(dt->philo[i].meal_time))
 			return (NULL);
-		usleep(10);
+		i++;
+		if (i == dt->n_philo)
+			i = 0;
 	}
 	//usleep(10);
 	return (NULL);
