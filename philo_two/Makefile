@@ -21,7 +21,7 @@ OBJS	= ${SRCS:.c=.o}
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	${OBJS}
-			$(CC) -lpthread $(FLAGS) -o $(NAME) $(OBJS)
+			$(CC) -lpthread -g3 $(FLAGS) -o $(NAME) $(OBJS)
 
 all:		${NAME}
 

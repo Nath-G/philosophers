@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/20 19:01:29 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/21 14:43:01 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,33 +18,29 @@ static void	ft_clean_sem_phi(char *sem_name, int phi, t_prog_dt *data)
 	sem_unlink(ft_sem_name(sem_name, data->philo[phi].name));
 }
 
-
-void		ft_post_sem(t_prog_dt *dt)
+static void		ft_post_sem(t_prog_dt *dt)
 {
 	int i;
 
-	i = 0;
-	while (i < dt->n_philo)
-	{
+	i = -1;
+	while (++i < dt->n_philo)
 		sem_post(dt->fork);
-		i++;
-	}
 	if (dt->n_meals != -1)
 	{
-		i = 0;
-		while (i < dt->n_philo)
+		i = -1;
+		while (++i < dt->n_philo)
 		{
-			if (dt->philo[i].meals_ate < dt->n_meals)
+			if (dt->philo[i].meals_ate <= dt->n_meals)
 				sem_post(dt->finish_eaten);
-			i++;
 		}
 	}
 	i = -1;
+	while (++i < dt->n_philo)
+		sem_post(dt->philo[i].meal_time);
+	i = -1;
 	while (++i < dt->n_philo * 5)
 		sem_post(dt->log_lock);
-	// ft_post_sem(dt->l_lock);
 }
-
 
 void		ft_clean_sem(t_prog_dt *data)
 {
@@ -66,14 +62,13 @@ void		ft_clean_sem(t_prog_dt *data)
 	sem_unlink("/end_lck");
 }
 
-void	philo_killer(t_prog_dt *data)
+void		philo_killer(t_prog_dt *data)
 {
 	int	i;
 	int	nb;
 
 	i = 0;
 	nb = data->n_philo;
-	ft_post_sem(data);
 	if (data->n_meals != -1)
 		pthread_join(data->eats_thread, NULL);
 	while (i < nb)
@@ -82,14 +77,16 @@ void	philo_killer(t_prog_dt *data)
 		pthread_join(data->philo[i].thread, NULL);
 		i++;
 	}
-	// ft_clean_sem(data);
 }
 
-void	clean_philo(t_prog_dt *data, t_param *param)
+void		clean_philo(t_prog_dt *data, t_param *param)
 {
 	int			i;
 
 	i = 0;
+	usleep(1000);
+	ft_post_sem(data);
+	usleep(1000);
 	philo_killer(data);
 	ft_clean_sem(data);
 	if (param)

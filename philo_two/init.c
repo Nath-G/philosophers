@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/20 17:41:29 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/21 10:48:06 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,12 @@ static int	ft_init_philo_data(t_prog_dt *data)
 	i = 0;
 	while (i < data->n_philo)
 	{
-		// if (i != 0)
-		// 	data->philo[i].right_fork = &data->philo[i - 1].left_fork;
 		data->philo[i].id = i + 1;
 		fill_nbr(data->philo[i].id, data->philo[i].name);
 		data->philo[i].meals_ate = 0;
 		data->philo[i].is_start_sleeping = 0;
 		i++;
 	}
-	// data->philo[0].right_fork = &data->philo[i - 1].left_fork;
 	i = 0;
 	while (i < data->n_philo)
 	{
@@ -37,16 +34,6 @@ static int	ft_init_philo_data(t_prog_dt *data)
 	}
 	return (0);
 }
-
-// static int	init_data_mutex(t_prog_dt *data)
-// {
-// 	if (pthread_mutex_init(&data->log_lock, NULL))
-// 		return (ft_display_msg(MUTEX_ERROR));
-// 	if (pthread_mutex_init(&data->end_lock, NULL))
-// 		return (ft_display_msg(MUTEX_ERROR));
-// 	pthread_mutex_lock(&data->end_lock);
-// 	return (0);
-// }
 
 static int	init_data(t_prog_dt *data)
 {
@@ -71,13 +58,6 @@ int			init_philo(t_prog_dt *data)
 		if (!(data->philo[i].time_last_meal =
 				malloc(sizeof(struct timeval))))
 			return (ft_display_msg(MALLOC_ERROR));
-		// if (pthread_mutex_init(&data->philo[i].left_fork, NULL))
-		// 	return (ft_display_msg(MUTEX_ERROR));
-		// if (pthread_mutex_init(&data->philo[i].finish_eaten, NULL))
-		// 	return (ft_display_msg(MUTEX_ERROR));
-		// if (pthread_mutex_init(&data->philo[i].meal_time, NULL))
-		// 	return (ft_display_msg(MUTEX_ERROR));
-		// pthread_mutex_lock(&data->philo[i].finish_eaten);
 		i++;
 	}
 	if (!(data->time_start = malloc(sizeof(struct timeval))))

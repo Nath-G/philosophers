@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/18 20:58:38 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/21 11:04:03 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		*death_checker(void *data)
 	i = 0;
 	dt = (t_prog_dt *)data;
 	phi = dt->philo;
-	while (!dt->is_finish || !dt->is_finish)
+	while (!dt->is_finish)
 	{
 		pthread_mutex_lock(&(phi->meal_time));
 		ft_get_time(&cur_time);

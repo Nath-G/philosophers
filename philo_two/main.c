@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/20 17:44:33 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/21 14:42:48 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,6 @@ int			main(int ac, char **av)
 	launch_philo(&data, param);
 	if (sem_wait(data.end_lock))
 		return (1);
-	// if (data.n_meals != -1)
-	// 	ft_unlock_mutex(&data);
 	clean_philo(&data, param);
 	return (0);
 }
