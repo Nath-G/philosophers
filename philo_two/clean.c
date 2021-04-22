@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/22 15:55:45 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/22 16:10:14 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void		ft_clean_sem(t_prog_dt *data)
 	sem_close(data->log_lock);
 	sem_close(data->end_lock);
 	sem_unlink("/fork");
-	sem_unlink("/finish_eaten");
+	sem_unlink("/end_eat");
 	sem_unlink("/log_lck");
 	sem_unlink("/end_lck");
 }

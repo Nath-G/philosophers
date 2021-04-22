@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/22 15:53:51 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/22 16:16:49 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	long unsigned	time_stamp;
 
 	take_forks(phi, dt);
-	if (!dt->is_finish)
-		sem_wait(phi->meal_time);
+	sem_wait(phi->meal_time);
 	ft_get_time(phi->time_last_meal);
 	ft_get_time(&cur_time);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
