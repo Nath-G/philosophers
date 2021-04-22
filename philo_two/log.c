@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 17:58:49 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/21 14:18:34 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/22 13:54:31 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		ft_display_msg(int msg_nb)
 }
 
 void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
-		sem_t *log_lock)
+		t_prog_dt *data)
 {
 	int				i;
 	char			*ptr;
@@ -53,10 +53,9 @@ void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
 	str = ft_strjoinfree(ptr, " ");
 	str = ft_strjoinfree(str, philo_name);
 	str = ft_strjoinfree(str, msg);
-	if (sem_wait(log_lock))
-		return ;
-	write(1, str, ft_strlen(str));
+	sem_wait(data->log_lock);
+	if (!data->is_finish)
+		write(1, str, ft_strlen(str));
 	free(str);
-		if (sem_post(log_lock))
-			return ;
+	sem_post(data->log_lock);
 }

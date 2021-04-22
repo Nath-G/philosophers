@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/21 14:43:01 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/22 15:55:45 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	ft_clean_sem_phi(char *sem_name, int phi, t_prog_dt *data)
 	sem_unlink(ft_sem_name(sem_name, data->philo[phi].name));
 }
 
-static void		ft_post_sem(t_prog_dt *dt)
+void		ft_post_sem(t_prog_dt *dt)
 {
 	int i;
 
@@ -33,10 +33,10 @@ static void		ft_post_sem(t_prog_dt *dt)
 			if (dt->philo[i].meals_ate <= dt->n_meals)
 				sem_post(dt->finish_eaten);
 		}
+		i = -1;
+		while (++i < dt->n_philo)
+			sem_post(dt->philo[i].meal_time);
 	}
-	i = -1;
-	while (++i < dt->n_philo)
-		sem_post(dt->philo[i].meal_time);
 	i = -1;
 	while (++i < dt->n_philo * 5)
 		sem_post(dt->log_lock);
@@ -73,18 +73,17 @@ void		philo_killer(t_prog_dt *data)
 		pthread_join(data->eats_thread, NULL);
 	while (i < nb)
 	{
-		pthread_join(data->philo[i].death_thread, NULL);
 		pthread_join(data->philo[i].thread, NULL);
+		pthread_join(data->philo[i].death_thread, NULL);
 		i++;
 	}
 }
 
-void		clean_philo(t_prog_dt *data, t_param *param)
+int			clean_philo(t_prog_dt *data, t_param *param)
 {
 	int			i;
 
 	i = 0;
-	usleep(1000);
 	ft_post_sem(data);
 	usleep(1000);
 	philo_killer(data);
@@ -103,4 +102,5 @@ void		clean_philo(t_prog_dt *data, t_param *param)
 		free(data->time_start);
 	if (data->philo)
 		free(data->philo);
+	return (1);
 }

@@ -6,11 +6,24 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/21 14:42:48 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/22 13:58:13 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
+
+static int	get_start_time(t_prog_dt *data)
+{
+	int	i;
+
+	if (gettimeofday(data->time_start, NULL))
+		return (TIME_ERROR);
+	i = -1;
+	while (++i < data->n_philo)
+		if (ft_get_time(data->philo[i].time_last_meal))
+			return (TIME_ERROR);
+	return (0);
+}
 
 static void	*philo_life(void *param)
 {
@@ -23,11 +36,6 @@ static void	*philo_life(void *param)
 	data = tmp->data;
 	phi = tmp->philo_dt;
 	i = 0;
-	if (pthread_create(&(phi->death_thread), NULL, death_checker, data) < 0)
-	{
-		ft_display_msg(PTHREAD_ERROR);
-		return (NULL);
-	}
 	while (!data->is_finish)
 	{
 		philo_eats(phi, data);
@@ -48,11 +56,6 @@ static void	*philo_life_bis(void *param)
 	data = tmp->data;
 	phi = tmp->philo_dt;
 	i = 0;
-	if (pthread_create(&(phi->death_thread), NULL, death_checker, data) < 0)
-	{
-		ft_display_msg(PTHREAD_ERROR);
-		return (NULL);
-	}
 	while (!data->is_finish)
 	{
 		philo_sleeps(phi, data);
@@ -66,13 +69,10 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 {
 	int	i;
 
-	if (gettimeofday(data->time_start, NULL))
+	if (get_start_time(data))
 		return (ft_display_msg(TIME_ERROR));
 	i = -1;
-	while (++i < data->n_philo)
-		ft_get_time(data->philo[i].time_last_meal);
-	i = 0;
-	while (i < data->n_philo && param && data)
+	while (++i < data->n_philo && param && data)
 	{
 		param[i].data = data;
 		param[i].philo_dt = &data->philo[i];
@@ -86,7 +86,9 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 			if (pthread_create(&(data->philo[i].thread), NULL, philo_life_bis,
 				&param[i]) < 0)
 				return (ft_display_msg(PTHREAD_ERROR));
-		i++;
+		if (pthread_create(&(data->philo[i].death_thread), NULL, death_checker,
+			&param[i]) < 0)
+			return (ft_display_msg(PTHREAD_ERROR));
 	}
 	return (0);
 }
@@ -104,14 +106,12 @@ int			main(int ac, char **av)
 		return (ft_display_msg(MALLOC_ERROR));
 	}
 	if (init_philo(&data))
-	{
-		clean_philo(&data, param);
-		return (1);
-	}
+		return (clean_philo(&data, param));
 	if (data.n_meals != -1)
 		if (pthread_create((&data.eats_thread), NULL, eats_checker, &data) < 0)
 			return (ft_display_msg(PTHREAD_ERROR));
-	launch_philo(&data, param);
+	if (launch_philo(&data, param))
+		return (clean_philo(&data, param));
 	if (sem_wait(data.end_lock))
 		return (1);
 	clean_philo(&data, param);
