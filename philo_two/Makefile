@@ -4,9 +4,9 @@
 NAME	= philo_two
 OS 		= $(shell uname)
 CC		= clang
-CFLAGS	= -Wall -Wextra -Werror -g3 -I./includes
+CFLAGS	= -Wall -Wextra -Werror -I./includes
 RM		= rm -f
-
+DEBUG	= -g3 -fsanitize
 # SRCS *********************************************************************** #
 
 SRCS	= main.c life_actions.c utils.c utils2.c init.c log.c clean.c \
@@ -21,7 +21,7 @@ OBJS	= ${SRCS:.c=.o}
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	${OBJS}
-			$(CC) -lpthread -g3 $(FLAGS) -o $(NAME) $(OBJS)
+			$(CC) -lpthread $(FLAGS) -o $(NAME) $(OBJS)
 
 all:		${NAME}
 
