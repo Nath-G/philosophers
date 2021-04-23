@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/22 16:10:14 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/23 12:25:02 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,13 @@ void		ft_post_sem(t_prog_dt *dt)
 	{
 		i = -1;
 		while (++i < dt->n_philo)
-		{
-			if (dt->philo[i].meals_ate <= dt->n_meals)
-				sem_post(dt->finish_eaten);
-		}
-		i = -1;
-		while (++i < dt->n_philo)
-			sem_post(dt->philo[i].meal_time);
+			sem_post(dt->finish_eaten);
 	}
 	i = -1;
-	while (++i < dt->n_philo * 5)
+	while (++i < dt->n_philo)
+		sem_post(dt->philo[i].meal_time);
+	i = -1;
+	while (++i < dt->n_philo)
 		sem_post(dt->log_lock);
 }
 
@@ -46,12 +43,9 @@ void		ft_clean_sem(t_prog_dt *data)
 {
 	int i;
 
-	i = 0;
-	while (i < data->n_philo)
-	{
+	i = -1;
+	while (++i < data->n_philo)
 		ft_clean_sem_phi("/ml_time", i, data);
-		i++;
-	}
 	sem_close(data->fork);
 	sem_close(data->finish_eaten);
 	sem_close(data->log_lock);
@@ -85,7 +79,6 @@ int			clean_philo(t_prog_dt *data, t_param *param)
 
 	i = 0;
 	ft_post_sem(data);
-	usleep(1000);
 	philo_killer(data);
 	ft_clean_sem(data);
 	if (param)
@@ -102,5 +95,5 @@ int			clean_philo(t_prog_dt *data, t_param *param)
 		free(data->time_start);
 	if (data->philo)
 		free(data->philo);
-	return (1);
+	return (0);
 }

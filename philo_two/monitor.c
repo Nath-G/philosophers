@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/22 15:54:11 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/23 12:18:23 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void		*eats_checker(void *data_philo)
 
 void		*death_checker(void *param)
 {
-	int					i;
 	unsigned long int	time_stamp;
 	struct timeval		cur_time;
 	t_param				*tmp;
@@ -60,10 +59,8 @@ void		*death_checker(void *param)
 
 	tmp = (t_param *)param;
 	phi = tmp->philo_dt;
-	i = 0;
 	while (!tmp->data->is_finish)
 	{
-		usleep(10);
 		sem_wait(phi->meal_time);
 		ft_get_time(&cur_time);
 		time_stamp = ft_get_time_diff(&cur_time, phi->time_last_meal);
