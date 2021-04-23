@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/21 11:04:03 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/23 12:28:11 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 static void	ft_death(t_prog_dt *dt, t_philo_dt *phi, struct timeval cur_time,
 				unsigned long int time_stamp)
 {
-	dt->is_finish = 1;
 	dt->one_is_died = 1;
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 	ft_display_log((time_stamp / ONE_MLSEC), phi->name, " died\n",
-		&(dt->output_protection));
+		dt);
+	dt->is_finish = 1;
 	pthread_mutex_unlock(&dt->finish_lock);
 	pthread_mutex_unlock(&(phi->meal_time));
 }
@@ -39,36 +39,34 @@ void		*eats_checker(void *data_philo)
 		++i;
 		if (i == data->n_philo && !data->one_is_died)
 		{
-			data->is_finish = 1;
 			ft_get_time(&cur_time);
 			time_stamp = ft_get_time_diff(&cur_time, data->time_start);
 			ft_display_log((time_stamp / ONE_MLSEC), "all philos",
-				" have eaten\n", &(data->output_protection));
+				" have eaten\n", data);
+			data->is_finish = 1;
 			pthread_mutex_unlock(&data->finish_lock);
 		}
 	}
 	return (NULL);
 }
 
-void		*death_checker(void *data)
+void		*death_checker(void *param)
 {
-	int					i;
-	t_philo_dt			*phi;
 	unsigned long int	time_stamp;
 	struct timeval		cur_time;
-	t_prog_dt			*dt;
+	t_param				*tmp;
+	t_philo_dt			*phi;
 
-	i = 0;
-	dt = (t_prog_dt *)data;
-	phi = dt->philo;
-	while (!dt->is_finish)
+	tmp = (t_param *)param;
+	phi = tmp->philo_dt;
+	while (!tmp->data->is_finish)
 	{
 		pthread_mutex_lock(&(phi->meal_time));
 		ft_get_time(&cur_time);
 		time_stamp = ft_get_time_diff(&cur_time, phi->time_last_meal);
-		if ((time_stamp) > dt->time_to_die)
+		if ((time_stamp) > tmp->data->time_to_die)
 		{
-			ft_death(dt, phi, cur_time, time_stamp);
+			ft_death(tmp->data, phi, cur_time, time_stamp);
 			break ;
 		}
 		pthread_mutex_unlock(&(phi->meal_time));

@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/18 19:57:21 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/23 12:17:25 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static void	*philo_life(void *param)
 {
-	int			i;
 	t_philo_dt	*phi;
 	t_param		*tmp;
 	t_prog_dt	*data;
@@ -22,12 +21,6 @@ static void	*philo_life(void *param)
 	tmp = (t_param *)param;
 	data = tmp->data;
 	phi = tmp->philo_dt;
-	i = 0;
-	if (pthread_create(&(phi->death_thread), NULL, death_checker, data) < 0)
-	{
-		ft_display_msg(PTHREAD_ERROR);
-		return (NULL);
-	}
 	while (!data->is_finish)
 	{
 		philo_eats(phi, data);
@@ -39,7 +32,6 @@ static void	*philo_life(void *param)
 
 static void	*philo_life_bis(void *param)
 {
-	int			i;
 	t_philo_dt	*phi;
 	t_param		*tmp;
 	t_prog_dt	*data;
@@ -47,12 +39,6 @@ static void	*philo_life_bis(void *param)
 	tmp = (t_param *)param;
 	data = tmp->data;
 	phi = tmp->philo_dt;
-	i = 0;
-	if (pthread_create(&(phi->death_thread), NULL, death_checker, data) < 0)
-	{
-		ft_display_msg(PTHREAD_ERROR);
-		return (NULL);
-	}
 	while (!data->is_finish)
 	{
 		philo_sleeps(phi, data);
@@ -71,8 +57,8 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 	i = -1;
 	while (++i < data->n_philo)
 		ft_get_time(data->philo[i].time_last_meal);
-	i = 0;
-	while (i < data->n_philo && param && data)
+	i = -1;
+	while (++i < data->n_philo && param && data)
 	{
 		param[i].data = data;
 		param[i].philo_dt = &data->philo[i];
@@ -84,7 +70,9 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 			if (pthread_create(&(data->philo[i].thread), NULL, philo_life_bis,
 				&param[i]) < 0)
 				return (ft_display_msg(PTHREAD_ERROR));
-		i++;
+		if (pthread_create(&(data->philo[i].death_thread), NULL, death_checker,
+				&param[i]) < 0)
+			ft_display_msg(PTHREAD_ERROR);
 	}
 	return (0);
 }

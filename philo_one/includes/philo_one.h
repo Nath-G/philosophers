@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/18 19:57:33 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/23 11:59:40 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int					philo_thinks(t_philo_dt *phi, t_prog_dt *data);
 */
 int					ft_display_msg(int msg_nb);
 void				ft_display_log(long unsigned time_stamp, char *philo_name,
-						char *msg, pthread_mutex_t *output_protection);
+						char *msg, t_prog_dt *data);
 /*
 **----monitoring----**
 */
