@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/26 13:26:21 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/26 14:01:49 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,9 @@ static int	take_forks(t_philo_dt *phi, t_prog_dt *dt, long unsigned int tm_stp)
 		if (!dt->is_finish)
 			ft_display_log((tm_stp / ONE_MLSEC), phi->name,
 				" has taken a fork\n", dt);
-		// if (!dt->is_finish)
-		// 	ft_display_log((tm_stp / ONE_MLSEC), phi->name,
-		// 		" has taken a fork\n", dt);
-	}
-	else
-		return (ft_display_msg(SEM_ERROR));
-		i = 1;
-	while (i < (dt->n_philo / 2))
-	{
-		if (sem_wait(dt->queue_forks[i]) != 0)
-			return (ft_display_msg(SEM_ERROR));
-		sem_post(dt->queue_forks[i - 1]);
-		i++;
-	}
-	if (sem_wait(dt->fork) == 0)
-	{
-		sem_post(dt->queue_forks[i - 1]);
 		if (!dt->is_finish)
 			ft_display_log((tm_stp / ONE_MLSEC), phi->name,
 				" has taken a fork\n", dt);
-		// if (!dt->is_finish)
-		// 	ft_display_log((tm_stp / ONE_MLSEC), phi->name,
-		// 		" has taken a fork\n", dt);
 	}
 	else
 		return (ft_display_msg(SEM_ERROR));

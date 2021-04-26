@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/26 11:36:07 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/26 14:17:13 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,13 @@ void		ft_clean_sem(t_prog_dt *data)
 
 	i = -1;
 	while (++i < data->n_philo)
-	{
 		ft_clean_sem_phi("/ml_time", i, data);
+	i = 0;
+	while (i < data->n_philo / 2)
+	{
 		sem_close(data->queue_forks[i]);
 		sem_unlink(ft_sem_name("queue_f", data->philo[i].name));
+		i++;
 	}
 	sem_close(data->fork);
 	sem_close(data->finish_eaten);

@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/19 16:10:30 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/26 12:08:15 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/26 14:13:46 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	init_queue_fork_sem(t_prog_dt *data)
 	int	i;
 
 	i = 0;
-	while (i < data->n_philo)
+	while (i < data->n_philo / 2)
 	{
 		sem_unlink(ft_sem_name("/queue_f", data->philo[i].name));
 		data->queue_forks[i] = sem_open(ft_sem_name("/queue_f",
@@ -44,7 +44,7 @@ int	init_data_sem(t_prog_dt *data)
 	int	i;
 
 	sem_unlink("/fork");
-	data->fork = sem_open("/fork", O_CREAT, 0777, data->n_philo);
+	data->fork = sem_open("/fork", O_CREAT, 0777, data->n_philo / 2);
 	sem_unlink("/end_eat");
 	data->finish_eaten = sem_open("/end_eat", O_CREAT, 0777,
 		data->n_philo);
