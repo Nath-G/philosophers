@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/23 10:10:21 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/26 11:52:33 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 {
 	int	i;
 
-	if (get_start_time(data))
-		return (ft_display_msg(TIME_ERROR));
+	if (init_queue_fork_sem(data))
+		return (ft_display_msg(SEM_ERROR));
 	i = -1;
 	while (++i < data->n_philo)
 	{
 		param[i].data = data;
 		param[i].philo_dt = &data->philo[i];
-		if (ft_init_sem_phi("/ml_time", i, data))
+		if (init_ml_time_phi_sem("/ml_time", i, data))
 			return (ft_display_msg(SEM_ERROR));
 		if (!data->philo[i].is_start_sleeping)
 			if (pthread_create(&(data->philo[i].thread), NULL, philo_life,
@@ -110,6 +110,8 @@ int			main(int ac, char **av)
 	if (data.n_meals != -1)
 		if (pthread_create((&data.eats_thread), NULL, eats_checker, &data) < 0)
 			return (ft_display_msg(PTHREAD_ERROR));
+	if (get_start_time(&data))
+		return (ft_display_msg(TIME_ERROR));
 	launch_philo(&data, param);
 	if (sem_wait(data.end_lock))
 		return (1);

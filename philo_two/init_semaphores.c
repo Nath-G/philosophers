@@ -6,19 +6,36 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/19 16:10:30 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/23 14:45:52 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/26 11:45:38 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int	ft_init_sem_phi(char *sem_name, int phi, t_prog_dt *data)
+int	init_ml_time_phi_sem(char *sem_name, int phi, t_prog_dt *data)
 {
 	sem_unlink(ft_sem_name(sem_name, data->philo[phi].name));
 	data->philo[phi].meal_time = sem_open(ft_sem_name(sem_name,
 		data->philo[phi].name), O_CREAT | O_EXCL, 0777, 1);
 	if (data->philo[phi].meal_time == SEM_FAILED)
 		return (SEM_ERROR);
+	return (0);
+}
+
+int	init_queue_fork_sem(t_prog_dt *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->n_philo)
+	{
+		sem_unlink(ft_sem_name("/queue_f", data->philo[i].name));
+		data->queue_forks[i] = sem_open(ft_sem_name("/queue_f",
+			data->philo[i].name), O_CREAT, 0777, 1);
+		if (data->queue_forks[i] == SEM_FAILED)
+			return (SEM_ERROR);
+		i++;
+	}
 	return (0);
 }
 

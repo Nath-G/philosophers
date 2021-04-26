@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/22 13:18:03 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/26 11:45:04 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ static int	init_data(t_prog_dt *data)
 	data->time_to_die = data->time_to_die * ONE_MLSEC;
 	data->time_to_eat = data->time_to_eat * ONE_MLSEC;
 	data->time_to_sleep = data->time_to_sleep * ONE_MLSEC;
+	if (!(data->queue_forks = malloc(sizeof(sem_t *) * data->n_philo)))
+		return (ft_display_msg(MALLOC_ERROR));
 	return (0);
 }
 
