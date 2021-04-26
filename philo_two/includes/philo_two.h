@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/26 10:17:20 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/26 13:17:15 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ int					init_philo(t_prog_dt *data);
 int					initialisation (int ac, char **av, t_prog_dt *data,
 					t_param *param);
 
-int					init_ml_time_phi_sem(char *sem_name, int phi, t_prog_dt	*data);
+int					init_ml_time_phi_sem(char *sem_name, int phi,
+						t_prog_dt	*data);
 char				*ft_sem_name(char *sem_name, char *phi_name);
 int					init_data_sem(t_prog_dt *data);
 int					init_queue_fork_sem(t_prog_dt *data);
