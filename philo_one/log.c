@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 17:58:49 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/23 12:00:16 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/27 17:04:23 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ int		ft_display_msg(int msg_nb)
 		return (ft_write_msg("Error : at argument initialisation\n", msg_nb));
 	if (msg_nb == DATA_INIT_ERROR)
 		return (ft_write_msg("Error : at data initialisation\n", msg_nb));
+	if (msg_nb == MUTEX_ERROR)
+		return (ft_write_msg("Error : at mutex initialisation\n", msg_nb));
+	if (msg_nb == TIME_ERROR)
+		return (ft_write_msg("Error : at time initialisation\n", msg_nb));
 	return (0);
 }
 

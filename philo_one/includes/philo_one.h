@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/23 11:59:40 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/27 17:03:41 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@
 
 # define ONE_MLSEC 1000
 # define ONE_MICROSEC 1000000
-# define ARG_NB_ERROR -1
-# define ARG_FORMAT_ERROR -2
-# define ARG_VALUE_ERROR -3
-# define MALLOC_ERROR -4
-# define PTHREAD_ERROR -5
-# define MUTEX_ERROR -6
-# define TIME_ERROR -7
-# define ARG_INIT_ERROR -8
-# define DATA_INIT_ERROR -9
+# define ARG_NB_ERROR -10
+# define ARG_FORMAT_ERROR -20
+# define ARG_VALUE_ERROR -30
+# define MALLOC_ERROR -40
+# define PTHREAD_ERROR -50
+# define MUTEX_ERROR -60
+# define TIME_ERROR -70
+# define ARG_INIT_ERROR -80
+# define DATA_INIT_ERROR -90
 
 typedef struct		s_philo_dt
 {
