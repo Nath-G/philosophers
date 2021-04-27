@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/23 12:18:23 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/27 16:17:29 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void		*death_checker(void *param)
 			break ;
 		}
 		sem_post(phi->meal_time);
+		usleep(1);
 	}
 	return (NULL);
 }
