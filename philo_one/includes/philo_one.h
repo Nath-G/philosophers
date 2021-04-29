@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/27 17:03:41 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/28 18:47:28 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ void				ft_display_log(long unsigned time_stamp, char *philo_name,
 */
 void				*death_checker(void *data);
 void				*eats_checker(void *data);
-void				philo_killer(t_prog_dt *data);
 
 /*
 **----time----**

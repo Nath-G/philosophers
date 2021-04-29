@@ -6,26 +6,13 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/04/18 20:00:48 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/28 18:49:17 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-void	ft_unlock_mutex(t_prog_dt *dt)
-{
-	int i;
-
-	i = 0;
-	while (i < dt->n_philo)
-	{
-		if (dt->philo[i].meals_ate < dt->n_meals)
-			pthread_mutex_unlock(&(dt->philo[i].finish_eaten));
-		i++;
-	}
-}
-
-void	philo_killer(t_prog_dt *data)
+static void	philo_killer(t_prog_dt *data)
 {
 	int	i;
 	int	nb;
@@ -43,9 +30,22 @@ void	philo_killer(t_prog_dt *data)
 	}
 }
 
-void	clean_philo(t_prog_dt *data, t_param *param)
+void		ft_unlock_mutex(t_prog_dt *dt)
 {
-	int			i;
+	int i;
+
+	i = 0;
+	while (i < dt->n_philo)
+	{
+		if (dt->philo[i].meals_ate < dt->n_meals)
+			pthread_mutex_unlock(&(dt->philo[i].finish_eaten));
+		i++;
+	}
+}
+
+void		clean_philo(t_prog_dt *data, t_param *param)
+{
+	int	i;
 
 	i = 0;
 	philo_killer(data);
