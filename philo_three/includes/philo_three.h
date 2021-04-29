@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 16:30:36 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/08 13:58:43 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/28 20:56:02 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,28 @@
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 # define ONE_MLSEC 1000
 # define ONE_MICROSEC 1000000
-# define ARG_NB_ERROR -1
-# define ARG_FORMAT_ERROR -2
-# define ARG_VALUE_ERROR -3
-# define MALLOC_ERROR -4
-# define PTHREAD_ERROR -5
-# define SEM_ERROR -6
-# define TIME_ERROR -7
-# define ARG_INIT_ERROR -8
-# define DATA_INIT_ERROR -9
+# define ARG_NB_ERROR -10
+# define ARG_FORMAT_ERROR -20
+# define ARG_VALUE_ERROR -30
+# define MALLOC_ERROR -40
+# define PTHREAD_ERROR -50
+# define SEM_ERROR -60
+# define TIME_ERROR -70
+# define ARG_INIT_ERROR -80
+# define DATA_INIT_ERROR -90
+# define FORK_ERROR -100
 
 typedef struct		s_philo_dt
 {
 	pid_t			pid;
 	char			*name;
 	int				id;
-//	pthread_t		thread;
 	pthread_t		death_thread;
-	int				is_died;
 	struct timeval	*time_last_meal;
 	int				meals_ate;
 	sem_t			*meal_time;
@@ -61,32 +62,37 @@ typedef struct		s_prog_dt
 	int				one_is_died;
 	int				is_finish;
 	pthread_t		eats_thread;
-	pthread_t		deaths_thread;
 	sem_t			*finish_eaten;
 	sem_t			*fork;
-	sem_t			*finish;
-//	sem_t			*write;
+	sem_t			**queue_forks;
+	sem_t			*end_lock;
+	sem_t			*log_lock;
+	sem_t			*death_lock;
 }					t_prog_dt;
 
 typedef struct		s_param
 {
 	t_prog_dt	*data;
-	t_philo_dt	*philo_dt;
+	t_philo_dt	*philo;
 }					t_param;
 
 /*
 **----clean up----**
 */
-void				clean_philo(t_prog_dt *data);
+int					clean_philo(t_prog_dt *data);
 void				ft_clean_sem(t_prog_dt *data);
-void				ft_post_sem(t_prog_dt *dt);
-void				ft_kill_process(t_prog_dt *data);
+void				ft_post_sem(t_prog_dt *data);
 
 /*
 **----initialisation----**
 */
 int					init_prog(int ac, char **av, t_prog_dt *data);
 int					init_philo(t_prog_dt *data);
+
+int					init_ml_time_phi_sem(char *sem_name, int phi,
+						t_prog_dt	*data);
+int					init_data_sem(t_prog_dt *data);
+int					init_queue_fork_sem(t_prog_dt *data);
 
 /*
 **----liffe actions----**
@@ -100,17 +106,15 @@ int					philo_thinks(t_philo_dt *phi, t_prog_dt *data);
 */
 int					ft_display_msg(int msg_nb);
 void				ft_display_log(long unsigned time_stamp, char *philo_name,
-						char *msg);
+						char *msg, t_prog_dt *data);
 
 /*
 **----monitoring----**
 */
 
-// void				death_checker(t_prog_dt *dt);
 void				*death_checker(void *param);
-//void				*eats_checker(void *data);
 void				philo_killer(t_prog_dt *data);
-int					monitor(t_prog_dt *data);
+int					meal_nb_monitor(t_prog_dt *data);
 
 /*
 **----time----**
@@ -130,5 +134,6 @@ int					ft_atoi(char *str, int *nb);
 void				fill_nbr(int nbr, char *ptr);
 void				fill_lunbr(long unsigned nbr, char *ptr);
 char				*ft_strjoinfree(char *s1, const char *s2);
+char				*ft_sem_name(char *sem_name, char *phi_name);
 
 #endif
