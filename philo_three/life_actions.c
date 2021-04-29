@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/28 19:52:46 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/29 16:30:19 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	phi->meals_ate++;
 	if (phi->meals_ate == dt->n_meals)
 		sem_post(dt->finish_eaten);
-	sem_post(dt->fork);
 	sem_post(dt->fork);
 	return (0);
 }
