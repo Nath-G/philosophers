@@ -9,7 +9,7 @@ RM		= rm -f
 # SRCS *********************************************************************** #
 
 SRCS	= main.c life_actions.c utils.c utils2.c init.c log.c clean.c \
-		  monitor.c time.c
+		  monitor.c time.c init_semaphores.c
 
 # OBJS *********************************************************************** #
 

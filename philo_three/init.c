@@ -6,45 +6,11 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/08 13:28:51 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/29 10:38:54 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
-
-static int	ft_init_sem(t_prog_dt *data)
-{
-	int	i;
-
-	i = 0;
-	sem_unlink("/fork");
-	data->fork = sem_open("/fork", O_CREAT | O_TRUNC, S_IRWXU, data->n_philo);
-	// sem_unlink("/meal_time");
-	// data->meal_time = sem_open("/meal_time", O_CREAT | O_TRUNC
-	// 	| O_RDWR, S_IRWXU, 1);
-	sem_unlink("/finish_eaten");
-	data->finish_eaten = sem_open("/finish_eaten", O_CREAT | O_TRUNC, S_IRWXU,
-		data->n_philo);
-	sem_unlink("/finish");
-	data->finish = sem_open("/finish", O_CREAT | O_TRUNC
-		| O_RDWR, S_IRWXU, data->n_philo);
-	if (data->finish_eaten == SEM_FAILED || data->fork == SEM_FAILED //|| data->meal_time == SEM_FAILED 
-		|| data->finish == SEM_FAILED)
-	{
-		ft_clean_sem(data);
-		return (SEM_ERROR);
-	}
-	i = -1;
-//	if (data->n_meals != -1)
-		while (++i < data->n_philo)
-		{
-			sem_wait(data->finish_eaten);
-			sem_wait(data->finish);
-		}
-
-
-	return (0);
-}
 
 static int	ft_init_philo_data(t_prog_dt *data)
 {
@@ -57,15 +23,6 @@ static int	ft_init_philo_data(t_prog_dt *data)
 		fill_nbr(data->philo[i].id, data->philo[i].name);
 		data->philo[i].meals_ate = 0;
 		data->philo[i].is_start_sleeping = 0;
-		data->philo[i].is_died = 0;
-		sem_unlink(data->philo[i].name);
-		data->philo[i].meal_time = sem_open(data->philo[i].name, O_CREAT | O_TRUNC
-		| O_RDWR, S_IRWXU, 1);
-		if ( data->philo[i].meal_time == SEM_FAILED)
-		{
-			ft_clean_sem(data);
-			return (SEM_ERROR);
-		}
 		i++;
 	}
 	i = 0;
@@ -86,6 +43,8 @@ static int	init_data(t_prog_dt *data)
 	data->time_to_die = data->time_to_die * ONE_MLSEC;
 	data->time_to_eat = data->time_to_eat * ONE_MLSEC;
 	data->time_to_sleep = data->time_to_sleep * ONE_MLSEC;
+	if (!(data->queue_forks = malloc(sizeof(sem_t *) * data->n_philo / 2)))
+		return (ft_display_msg(MALLOC_ERROR));
 	return (0);
 }
 
@@ -93,20 +52,25 @@ int			init_philo(t_prog_dt *data)
 {
 	int i;
 
-	i = 0;
-	while (i < data->n_philo)
+	i = -1;
+	while (++i < data->n_philo)
 	{
 		if (!(data->philo[i].name = malloc(sizeof(char) * 10)))
 			return (ft_display_msg(MALLOC_ERROR));
 		if (!(data->philo[i].time_last_meal =
 				malloc(sizeof(struct timeval))))
 			return (ft_display_msg(MALLOC_ERROR));
-		i++;
 	}
 	if (!(data->time_start = malloc(sizeof(struct timeval))))
 		return (ft_display_msg(MALLOC_ERROR));
 	if (ft_init_philo_data(data))
 		return (ft_display_msg(DATA_INIT_ERROR));
+	if (init_queue_fork_sem(data))
+		return (ft_display_msg(SEM_ERROR));
+	i = -1;
+	while (++i < data->n_philo)
+		if (init_ml_time_phi_sem("/ml_time", i, data))
+			return (ft_display_msg(SEM_ERROR));
 	return (0);
 }
 
@@ -134,7 +98,7 @@ int			init_prog(int ac, char **av, t_prog_dt *data)
 	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) *
 			(data->n_philo))))
 		return (ft_display_msg(MALLOC_ERROR));
-	if (ft_init_sem(data))
+	if (init_data_sem(data))
 		return (ft_display_msg(SEM_ERROR));
 	return (0);
 }

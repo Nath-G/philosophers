@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:01:20 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/01 16:32:05 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/28 11:51:18 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,28 @@ void	fill_nbr(int nbr, char *ptr)
 		ptr++;
 	}
 	*ptr = '\0';
+}
+
+char	*ft_sem_name(char *sem_name, char *phi_name)
+{
+	static char	name[13];
+	int			len;
+	int			i;
+	int			j;
+
+	len = ft_strlen(phi_name);
+	i = 0;
+	while (sem_name[i] || i < 8)
+	{
+		name[i] = sem_name[i];
+		i++;
+	}
+	j = 0;
+	while (phi_name[j] && name[i + j] && (i + j) < 12)
+	{
+		name[i + j] = phi_name[j];
+		j++;
+	}
+	name[i + j] = '\0';
+	return (name);
 }

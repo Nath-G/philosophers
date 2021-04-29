@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/08 13:58:32 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/29 10:36:56 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,47 +14,41 @@
 
 static int	philo_life(t_param *param, t_philo_dt *phi)
 {
-	int			i;
 	t_prog_dt	*data;
-	pthread_t	death_thread;
 
 	data = param->data;
-	death_thread = 0;
-	if (pthread_create(&(death_thread), NULL, death_checker, param) < 0)
-			return (ft_display_msg(PTHREAD_ERROR));//essayer de mettre le thread dans la structure et ajouter le join dans le clean
-
-	i = 0;
-	while (!data->is_finish && !data->one_is_died)
+	while (!data->is_finish)
 	{
-		if (!phi->is_start_sleeping)
-			philo_eats(phi, data);
+		philo_eats(phi, data);
 		philo_sleeps(phi, data);
 		philo_thinks(phi, data);
 	}
-	pthread_join(death_thread, NULL);
 	return (0);
 }
 
-static int	launch_philo(t_prog_dt *data)
+static int	launch_philo(t_prog_dt *data, t_param *param)
 {
-	int	i;
-	t_param		*param;
-	if (!(param = (t_param *)malloc(sizeof(t_param) * data->n_philo)))
-	{
-		clean_philo(data);
-		return (ft_display_msg(MALLOC_ERROR));
-	}
+	int		i;
+	pid_t	child_pid;
+
 	if (gettimeofday(data->time_start, NULL))
 		return (ft_display_msg(TIME_ERROR));
 	i = 0;
 	param->data = data;
-	while (i < data->n_philo && param && data)
+	while (i < data->n_philo && param && data && !data->is_finish)
 	{
-		ft_get_time(data->philo[i].time_last_meal);
-		param->philo_dt = &(data->philo[i]);
-		data->philo[i].pid = fork();
-		if (data->philo[i].pid == 0)
-			philo_life(param, &(data->philo[i]));
+		param->philo = &(data->philo[i]);
+		if (ft_get_time(param->philo->time_last_meal))
+			return (ft_display_msg(TIME_ERROR));
+		param->philo->pid = fork();
+		if (!(child_pid = param->philo->pid))
+		{
+			pthread_create(&(param->philo->death_thread), NULL,
+				(void*)death_checker, (void*)param);
+			philo_life(param, param->philo);
+		}
+		else if (child_pid < 0)
+			return (ft_display_msg(FORK_ERROR));
 		i++;
 	}
 	free(param);
@@ -64,17 +58,20 @@ static int	launch_philo(t_prog_dt *data)
 int			main(int ac, char **av)
 {
 	t_prog_dt	data;
+	t_param		*param;
 
 	if (init_prog(ac, av, &data))
 		return (1);
-	if (init_philo(&data))
+	if (!(param = (t_param *)malloc(sizeof(t_param) * data.n_philo)))
 	{
 		clean_philo(&data);
-		return (1);
+		return (ft_display_msg(MALLOC_ERROR));
 	}
-	monitor(&data);
-	launch_philo(&data);
-	//sem_wait(data.finish);
+	if (init_philo(&data))
+		return (clean_philo(&data));
+	meal_nb_monitor(&data);
+	launch_philo(&data, param);
+	sem_wait(data.end_lock);
 	clean_philo(&data);
 	return (0);
 }

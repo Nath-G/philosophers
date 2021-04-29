@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 17:58:49 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/08 13:31:36 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/28 19:15:18 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,13 @@ int		ft_display_msg(int msg_nb)
 		return (ft_write_msg("Error : at argument initialisation\n", msg_nb));
 	if (msg_nb == SEM_ERROR)
 		return (ft_write_msg("Error : at semaphore opening\n", msg_nb));
+	if (msg_nb == FORK_ERROR)
+		return (ft_write_msg("Error : at fork creation\n", msg_nb));
 	return (0);
 }
 
-void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg)
+void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
+		t_prog_dt *data)
 {
 	int				i;
 	char			*ptr;
@@ -52,11 +55,9 @@ void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg)
 	str = ft_strjoinfree(ptr, " ");
 	str = ft_strjoinfree(str, philo_name);
 	str = ft_strjoinfree(str, msg);
-//	if (sem_wait(data->write_msg))
-//		return ;
-	//if (!data->is_finish && !data->one_is_died)
+	sem_wait(data->log_lock);
+	if (!data->is_finish)
 		write(1, str, ft_strlen(str));
-//	if (sem_post(data->write_msg))
-//		return ;
+	sem_post(data->log_lock);
 	free(str);
 }
