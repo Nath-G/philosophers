@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/19 16:10:30 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/28 19:01:21 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/29 11:32:18 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	init_ml_time_phi_sem(char *sem_name, int phi, t_prog_dt *data)
 {
 	sem_unlink(ft_sem_name(sem_name, data->philo[phi].name));
 	data->philo[phi].meal_time = sem_open(ft_sem_name(sem_name,
-		data->philo[phi].name), O_CREAT | O_EXCL, 0777, 1);
+		data->philo[phi].name), O_CREAT, 0777, 1);
 	if (data->philo[phi].meal_time == SEM_FAILED)
 		return (SEM_ERROR);
 	return (0);
