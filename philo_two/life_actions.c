@@ -6,33 +6,45 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/26 14:01:49 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/28 18:40:12 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-static int	take_forks(t_philo_dt *phi, t_prog_dt *dt, long unsigned int tm_stp)
+static int	log_fork(t_philo_dt *phi, t_prog_dt *dt)
+{
+	struct timeval	cur_time;
+	long unsigned	time_stamp;
+
+	if (ft_get_time(&cur_time))
+		return (TIME_ERROR);
+	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
+	if (!dt->is_finish)
+		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
+			" has taken a fork\n", dt);
+	if (!dt->is_finish)
+		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
+			" has taken a fork\n", dt);
+	return (0);
+}
+
+static int	take_forks(t_philo_dt *phi, t_prog_dt *dt)
 {
 	int	i;
 
-	i = 1;
-	while (i < (dt->n_philo / 2))
+	i = 0;
+	while (++i < (dt->n_philo / 2))
 	{
 		if (sem_wait(dt->queue_forks[i]) != 0)
 			return (ft_display_msg(SEM_ERROR));
 		sem_post(dt->queue_forks[i - 1]);
-		i++;
 	}
 	if (sem_wait(dt->fork) == 0)
 	{
 		sem_post(dt->queue_forks[i - 1]);
-		if (!dt->is_finish)
-			ft_display_log((tm_stp / ONE_MLSEC), phi->name,
-				" has taken a fork\n", dt);
-		if (!dt->is_finish)
-			ft_display_log((tm_stp / ONE_MLSEC), phi->name,
-				" has taken a fork\n", dt);
+		if (log_fork(phi, dt))
+			return (TIME_ERROR);
 	}
 	else
 		return (ft_display_msg(SEM_ERROR));
@@ -44,9 +56,7 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	struct timeval	cur_time;
 	long unsigned	time_stamp;
 
-	ft_get_time(&cur_time);
-	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-	if (take_forks(phi, dt, time_stamp))
+	if (take_forks(phi, dt))
 		return (1);
 	sem_wait(phi->meal_time);
 	ft_get_time(phi->time_last_meal);

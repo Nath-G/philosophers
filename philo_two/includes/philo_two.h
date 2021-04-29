@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/27 17:04:50 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/28 18:41:10 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,12 @@ void				ft_post_sem(t_prog_dt *dt);
 */
 int					init_prog(int ac, char **av, t_prog_dt *data);
 int					init_philo(t_prog_dt *data);
-int					initialisation (int ac, char **av, t_prog_dt *data,
-					t_param *param);
 
 int					init_ml_time_phi_sem(char *sem_name, int phi,
 						t_prog_dt	*data);
-char				*ft_sem_name(char *sem_name, char *phi_name);
 int					init_data_sem(t_prog_dt *data);
 int					init_queue_fork_sem(t_prog_dt *data);
+
 /*
 **----liffe actions----**
 */
@@ -129,5 +127,6 @@ int					ft_atoi(char *str, int *nb);
 void				fill_nbr(int nbr, char *ptr);
 void				fill_lunbr(long unsigned nbr, char *ptr);
 char				*ft_strjoinfree(char *s1, const char *s2);
+char				*ft_sem_name(char *sem_name, char *phi_name);
 
 #endif

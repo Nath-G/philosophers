@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 17:58:49 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/27 17:06:23 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/28 10:29:33 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
 	sem_wait(data->log_lock);
 	if (!data->is_finish)
 		write(1, str, ft_strlen(str));
-	free(str);
 	sem_post(data->log_lock);
+	free(str);
 }
