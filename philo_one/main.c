@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/28 19:43:32 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/30 14:07:08 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 	{
 		param[i].data = data;
 		param[i].philo_dt = &data->philo[i];
-		ft_get_time(data->philo[i].time_last_meal);
+		param[i].philo_dt->time_last_meal->tv_sec = data->time_start->tv_sec;
+		param[i].philo_dt->time_last_meal->tv_usec = data->time_start->tv_usec;
+		// ft_get_time(data->philo[i].time_last_meal);
 		if (!data->philo[i].is_start_sleeping)
 			if (pthread_create(&(data->philo[i].thread), NULL, philo_life,
 				&param[i]) < 0)

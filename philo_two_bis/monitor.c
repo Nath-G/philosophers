@@ -6,40 +6,23 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/03 12:29:03 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/03 11:33:41 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_three.h"
+#include "philo_two.h"
 
-static void	ft_death(t_prog_dt *dt, char *phi_name, struct timeval cur_time,
+static int	ft_death(t_prog_dt *dt, t_philo_dt *phi, struct timeval cur_time,
 				unsigned long int time_stamp)
 {
-	sem_wait(dt->death_lock);
 	dt->one_is_died = 1;
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-	ft_display_log((time_stamp / 1000), phi_name, " died\n", dt);
-//	sem_wait(dt->log_lock);
+	ft_display_log((time_stamp / ONE_MLSEC), phi->name, " died\n",
+		dt);
+	//sem_wait(dt->log_lock);
 	dt->is_finish = 1;
 	sem_post(dt->end_lock);
-}
-
-void		*death_monitor(void *data)
-{
-	int			i;
-	t_prog_dt	*dt;
-
-	i = 0;
-	dt = (t_prog_dt *)data;
-	while (!dt->is_finish && !dt->one_is_died)
-	{
-		if (sem_wait(dt->death_lock))
-			return (NULL);
-		dt->is_finish = 1;
-		dt->one_is_died = 1;
-		sem_post(dt->end_lock);
-	}
-	return (NULL);
+	return (0);
 }
 
 void		*eats_checker(void *data_philo)
@@ -55,13 +38,12 @@ void		*eats_checker(void *data_philo)
 	{
 		sem_wait(data->finish_eaten);
 		++i;
-		if ((i == data->n_philo) && !data->one_is_died)
+		if (i == data->n_philo && !data->one_is_died)
 		{
 			ft_get_time(&cur_time);
 			time_stamp = ft_get_time_diff(&cur_time, data->time_start);
 			ft_display_log((time_stamp / ONE_MLSEC), "all philos",
 				" have eaten\n", data);
-		//	sem_wait(data->log_lock);
 			data->is_finish = 1;
 			sem_post(data->end_lock);
 		}
@@ -69,41 +51,37 @@ void		*eats_checker(void *data_philo)
 	return (NULL);
 }
 
-void		*death_checker(void *param)
+void		*death_checker(void *data)
 {
-	t_philo_dt			*phi;
 	unsigned long int	time_stamp;
 	struct timeval		cur_time;
 	t_prog_dt			*dt;
+	t_philo_dt			*phi;
+	int					i;
+	
+	dt = (t_prog_dt *)data;
 
-	phi = ((t_param *)param)->philo;
-	dt = ((t_param *)param)->data;
-	while (!dt->is_finish)
+	phi = dt->philo;
+	i= -1;		
+	while (!dt->is_finish && (++i < dt->n_philo))
 	{
-		while (!phi->meal_time && !dt->is_finish)
-			usleep(1);
-		sem_wait(phi->meal_time);
+	//	printf("in monitor phi %s i = %d\n", dt->philo[i], i);
+		while(!phi[i].time_last_meal)
+			i++;
+		// sem_wait(phi[i].meal_time);
+		// ft_get_time(&cur_time);
+		sem_wait(phi[i].meal_time);
 		ft_get_time(&cur_time);
-		time_stamp = ft_get_time_diff(&cur_time, phi->time_last_meal);
-		if ((time_stamp) > dt->time_to_die)
+	//	time_stamp = ft_get_time_diff(&cur_time, phi[i].time_last_meal);
+		if ((time_stamp = ft_get_time_diff(&cur_time, phi[i].time_last_meal)) > dt->time_to_die)
 		{
-			ft_death(dt, phi->name, cur_time, time_stamp);
+			ft_death(dt, &phi[i], cur_time, time_stamp);
 			break ;
 		}
-		sem_post(phi->meal_time);
+		sem_post(phi[i].meal_time);
 		usleep(1);
+		if (i == (dt->n_philo - 1))
+			i = -1;
 	}
 	return (NULL);
-}
-
-int			meal_nb_monitor(t_prog_dt *data)
-{
-	data->eats_thread = 0;
-	if (data->n_meals != -1)
-	{
-		if ((pthread_create(&(data->eats_thread), NULL, eats_checker,
-				data) < 0))
-			return (ft_display_msg(PTHREAD_ERROR));
-	}
-	return (0);
 }

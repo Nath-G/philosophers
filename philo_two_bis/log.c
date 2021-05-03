@@ -6,11 +6,11 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 17:58:49 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/30 18:58:59 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/30 18:52:23 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_three.h"
+#include "philo_two.h"
 
 int		ft_display_msg(int msg_nb)
 {
@@ -26,10 +26,12 @@ int		ft_display_msg(int msg_nb)
 		return (ft_write_msg("Error : at pthread creation\n", msg_nb));
 	if (msg_nb == ARG_INIT_ERROR)
 		return (ft_write_msg("Error : at argument initialisation\n", msg_nb));
+	if (msg_nb == DATA_INIT_ERROR)
+		return (ft_write_msg("Error : at data initialisation\n", msg_nb));
 	if (msg_nb == SEM_ERROR)
-		return (ft_write_msg("Error : at semaphore opening\n", msg_nb));
-	if (msg_nb == FORK_ERROR)
-		return (ft_write_msg("Error : at fork creation\n", msg_nb));
+		return (ft_write_msg("Error : at semaphore initialisation\n", msg_nb));
+	if (msg_nb == TIME_ERROR)
+		return (ft_write_msg("Error : at time initialisation\n", msg_nb));
 	return (0);
 }
 
@@ -38,7 +40,7 @@ void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
 {
 	int				i;
 	char			*ptr;
-	//char			*str;
+	// char			*str;
 	long unsigned	nbr;
 
 	nbr = time_stamp;
@@ -62,7 +64,6 @@ void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
 		write(1, " ", 1);
 		write(1, philo_name, ft_strlen(philo_name));
 		write(1, msg, ft_strlen(msg));
-
 	}
 	free(ptr);
 	if (!(msg[1] == 'd') && (!((msg[1] == 'h') && (msg[3] == 'v'))))

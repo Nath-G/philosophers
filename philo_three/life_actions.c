@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/29 16:30:19 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/03 12:30:05 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,14 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 		return (1);
 	sem_wait(phi->meal_time);
 	ft_get_time(phi->time_last_meal);
-	ft_get_time(&cur_time);
+	sem_post(phi->meal_time);
+	cur_time.tv_sec = phi->time_last_meal->tv_sec;
+	cur_time.tv_usec = phi->time_last_meal->tv_usec;
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 	if (!dt->is_finish)
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
 			" is eating\n", dt);
-	sem_post(phi->meal_time);
+	// sem_post(phi->meal_time);
 	usleep(dt->time_to_eat);
 	phi->meals_ate++;
 	if (phi->meals_ate == dt->n_meals)
