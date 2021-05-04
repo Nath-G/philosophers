@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 16:12:16 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 16:38:22 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static int	ft_init_philo_data(t_prog_dt *data)
 {
 	int i;
 
-	i = 0;
-	while (i < data->n_philo)
+	i = -1;
+	while (++i < data->n_philo)
 	{
 		data->philo[i].id = i + 1;
 		fill_nbr(data->philo[i].id, data->philo[i].name);
@@ -25,16 +25,11 @@ static int	ft_init_philo_data(t_prog_dt *data)
 		data->philo[i].is_start_sleeping = 0;
 		data->philo[i].time_last_meal->tv_sec = 0;
 		data->philo[i].time_last_meal->tv_usec = 0;
-	
-		i++;
 	}
-	i = 0;
-	while (i < data->n_philo)
-	{
+	i = -1;
+	while (++i < data->n_philo)
 		if ((i % 2))
 			data->philo[i].is_start_sleeping = 1;
-		i++;
-	}
 	if (init_queue_fork_sem(data))
 		return (ft_display_msg(SEM_ERROR));
 	i = -1;
