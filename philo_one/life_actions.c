@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/03 18:25:35 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 15:46:23 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ static void	take_forks(t_philo_dt *phi, t_prog_dt *dt)
 	pthread_mutex_lock(phi->right_fork);
 	ft_get_time(&cur_time);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-	if (!dt->is_finish)
+	//if (!dt->is_finish)
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
 			" has taken a fork\n", dt);
-	if (!dt->is_finish)
+	//if (!dt->is_finish)
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
 			" has taken a fork\n", dt);
 }
@@ -35,8 +35,8 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	long unsigned	time_stamp;
 
 	take_forks(phi, dt);
-	if (!dt->is_finish)
-	{
+	//if (!dt->is_finish)
+	//{
 		pthread_mutex_lock(&phi->meal_time);
 		ft_get_time(phi->time_last_meal);
 		pthread_mutex_unlock(&phi->meal_time);
@@ -50,7 +50,7 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 		phi->meals_ate++;
 		if (phi->meals_ate == dt->n_meals)
 			pthread_mutex_unlock(&phi->finish_eaten);
-	}
+	//}
 	pthread_mutex_unlock(&phi->left_fork);
 	pthread_mutex_unlock(phi->right_fork);
 	return (0);
