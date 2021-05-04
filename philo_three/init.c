@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 12:12:22 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 16:13:06 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ static int	ft_init_philo_data(t_prog_dt *data)
 		fill_nbr(data->philo[i].id, data->philo[i].name);
 		data->philo[i].meals_ate = 0;
 		data->philo[i].is_start_sleeping = 0;
+		data->philo[i].time_last_meal->tv_sec = 0;
+		data->philo[i].time_last_meal->tv_usec = 0;
+	
 		i++;
 	}
 	i = 0;
