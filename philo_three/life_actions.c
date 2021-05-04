@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/03 12:30:05 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 12:12:25 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	take_forks(t_philo_dt *phi, t_prog_dt *dt)
 	int	ret;
 
 	i = 1;
-	while (i < (dt->n_philo / 2))
+	while (i < (dt->n_phi / 2))
 	{
 		if (sem_wait(dt->queue_forks[i]) != 0)
 			return (ft_display_msg(SEM_ERROR));
@@ -69,7 +69,6 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	if (!dt->is_finish)
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
 			" is eating\n", dt);
-	// sem_post(phi->meal_time);
 	usleep(dt->time_to_eat);
 	phi->meals_ate++;
 	if (phi->meals_ate == dt->n_meals)

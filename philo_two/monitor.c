@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/27 16:17:29 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 11:03:07 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static int	ft_death(t_prog_dt *dt, t_philo_dt *phi, struct timeval cur_time,
 	ft_display_log((time_stamp / ONE_MLSEC), phi->name, " died\n",
 		dt);
 	dt->is_finish = 1;
+	sem_wait(dt->log_lock);
 	sem_post(dt->end_lock);
 	return (0);
 }
@@ -44,33 +45,37 @@ void		*eats_checker(void *data_philo)
 			ft_display_log((time_stamp / ONE_MLSEC), "all philos",
 				" have eaten\n", data);
 			data->is_finish = 1;
+			sem_wait(data->log_lock);
 			sem_post(data->end_lock);
 		}
 	}
 	return (NULL);
 }
 
-void		*death_checker(void *param)
+void		*death_checker(void *data)
 {
 	unsigned long int	time_stamp;
 	struct timeval		cur_time;
-	t_param				*tmp;
-	t_philo_dt			*phi;
+	t_prog_dt			*dt;
+	int					i;
 
-	tmp = (t_param *)param;
-	phi = tmp->philo_dt;
-	while (!tmp->data->is_finish)
+	dt = (t_prog_dt *)data;
+	i = -1;
+	while (!dt->is_finish && (++i < dt->n_philo))
 	{
-		sem_wait(phi->meal_time);
+		sem_wait(dt->philo[i].meal_time);
 		ft_get_time(&cur_time);
-		time_stamp = ft_get_time_diff(&cur_time, phi->time_last_meal);
-		if ((time_stamp) > tmp->data->time_to_die)
+		time_stamp = ft_get_time_diff(&cur_time,
+				dt->philo[i].time_last_meal);
+		if (time_stamp > dt->time_to_die)
 		{
-			ft_death(tmp->data, phi, cur_time, time_stamp);
+			ft_death(dt, &(dt->philo[i]), cur_time, time_stamp);
 			break ;
 		}
-		sem_post(phi->meal_time);
+		sem_post(dt->philo[i].meal_time);
 		usleep(1);
+		if (i == (dt->n_philo - 1))
+			i = -1;
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/30 14:07:08 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/03 18:24:16 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 		param[i].philo_dt = &data->philo[i];
 		param[i].philo_dt->time_last_meal->tv_sec = data->time_start->tv_sec;
 		param[i].philo_dt->time_last_meal->tv_usec = data->time_start->tv_usec;
-		// ft_get_time(data->philo[i].time_last_meal);
 		if (!data->philo[i].is_start_sleeping)
 			if (pthread_create(&(data->philo[i].thread), NULL, philo_life,
 				&param[i]) < 0)
@@ -70,9 +69,7 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 			if (pthread_create(&(data->philo[i].thread), NULL, philo_life_bis,
 				&param[i]) < 0)
 				return (ft_display_msg(PTHREAD_ERROR));
-		if (pthread_create(&(data->philo[i].death_thread), NULL, death_checker,
-				&param[i]) < 0)
-			ft_display_msg(PTHREAD_ERROR);
+		usleep(1);
 	}
 	return (0);
 }
@@ -95,12 +92,12 @@ int			main(int ac, char **av)
 		return (1);
 	}
 	if (data.n_meals != -1)
-		if (pthread_create((&data.eats_thread), NULL, eats_checker, &data) < 0)
+		if (pthread_create(&(data.eats_thread), NULL, eats_checker, &data) < 0)
 			return (ft_display_msg(PTHREAD_ERROR));
+	if (pthread_create(&(data.deaths_thread), NULL, death_checker, &data) < 0)
+		ft_display_msg(PTHREAD_ERROR);
 	launch_philo(&data, param);
 	pthread_mutex_lock(&(data.finish_lock));
-	if (data.n_meals != -1)
-		ft_unlock_mutex(&data);
 	clean_philo(&data, param);
 	return (0);
 }

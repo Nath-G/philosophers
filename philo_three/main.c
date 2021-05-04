@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/29 10:36:56 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 12:12:27 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 		return (ft_display_msg(TIME_ERROR));
 	i = 0;
 	param->data = data;
-	while (i < data->n_philo && param && data && !data->is_finish)
+	while (i < data->n_phi && param && data && !data->is_finish)
 	{
 		param->philo = &(data->philo[i]);
 		if (ft_get_time(param->philo->time_last_meal))
@@ -62,16 +62,16 @@ int			main(int ac, char **av)
 
 	if (init_prog(ac, av, &data))
 		return (1);
-	if (!(param = (t_param *)malloc(sizeof(t_param) * data.n_philo)))
+	if (!(param = (t_param *)malloc(sizeof(t_param) * data.n_phi)))
 	{
-		clean_philo(&data);
+		clean_phi(&data);
 		return (ft_display_msg(MALLOC_ERROR));
 	}
 	if (init_philo(&data))
-		return (clean_philo(&data));
+		return (clean_phi(&data));
 	meal_nb_monitor(&data);
 	launch_philo(&data, param);
 	sem_wait(data.end_lock);
-	clean_philo(&data);
+	clean_phi(&data);
 	return (0);
 }

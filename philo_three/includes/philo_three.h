@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 16:30:36 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/28 20:56:02 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 12:12:32 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct		s_philo_dt
 
 typedef struct		s_prog_dt
 {
-	int				n_philo;
+	int				n_phi;
 	unsigned int	time_to_die;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
@@ -79,7 +79,7 @@ typedef struct		s_param
 /*
 **----clean up----**
 */
-int					clean_philo(t_prog_dt *data);
+int					clean_phi(t_prog_dt *data);
 void				ft_clean_sem(t_prog_dt *data);
 void				ft_post_sem(t_prog_dt *data);
 

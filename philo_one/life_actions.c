@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/30 16:28:30 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/03 18:25:35 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 		if (!dt->is_finish && !dt->one_is_died)
 			ft_display_log((time_stamp / ONE_MLSEC), phi->name,
 				" is eating\n", dt);
-		// pthread_mutex_unlock(&phi->meal_time);
 		usleep(dt->time_to_eat);
 		phi->meals_ate++;
 		if (phi->meals_ate == dt->n_meals)

@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/29 20:07:28 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 11:57:46 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,10 @@ static int	log_fork(t_philo_dt *phi, t_prog_dt *dt)
 	if (ft_get_time(&cur_time))
 		return (TIME_ERROR);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-	if (!dt->is_finish)
-		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
-			" has taken a fork\n", dt);
-	if (!dt->is_finish)
-		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
-			" has taken a fork\n", dt);
+	ft_display_log((time_stamp / ONE_MLSEC), phi->name,
+		" has taken a fork\n", dt);
+	ft_display_log((time_stamp / ONE_MLSEC), phi->name,
+		" has taken a fork\n", dt);
 	return (0);
 }
 
@@ -60,12 +58,10 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 		return (1);
 	sem_wait(phi->meal_time);
 	ft_get_time(phi->time_last_meal);
+	sem_post(phi->meal_time);
 	ft_get_time(&cur_time);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-	if (!dt->is_finish)
-		ft_display_log((time_stamp / ONE_MLSEC), phi->name, " is eating\n",
-			dt);
-	sem_post(phi->meal_time);
+	ft_display_log((time_stamp / ONE_MLSEC), phi->name, " is eating\n", dt);
 	usleep(dt->time_to_eat);
 	phi->meals_ate++;
 	if (phi->meals_ate == dt->n_meals)
@@ -81,9 +77,8 @@ int			philo_sleeps(t_philo_dt *phi, t_prog_dt *dt)
 
 	ft_get_time(&cur_time);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-	if (!dt->is_finish)
-		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
-			" is sleeping\n", dt);
+	ft_display_log((time_stamp / ONE_MLSEC), phi->name,
+		" is sleeping\n", dt);
 	usleep(dt->time_to_sleep);
 	return (0);
 }
@@ -95,8 +90,7 @@ int			philo_thinks(t_philo_dt *phi, t_prog_dt *dt)
 
 	ft_get_time(&cur_time);
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
-	if (!dt->is_finish && !dt->one_is_died)
-		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
-			" is thinking\n", dt);
+	ft_display_log((time_stamp / ONE_MLSEC), phi->name,
+		" is thinking\n", dt);
 	return (0);
 }

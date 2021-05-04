@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/27 16:32:33 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 11:33:25 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,27 +50,29 @@ void		*eats_checker(void *data_philo)
 	return (NULL);
 }
 
-void		*death_checker(void *param)
+void		*death_checker(void *data)
 {
 	unsigned long int	time_stamp;
 	struct timeval		cur_time;
-	t_param				*tmp;
-	t_philo_dt			*phi;
+	t_prog_dt			*dt;
+	int					i;
 
-	tmp = (t_param *)param;
-	phi = tmp->philo_dt;
-	while (!tmp->data->is_finish)
+	dt = (t_prog_dt *)data;
+	i = -1;
+	while (!dt->is_finish && (++i < dt->n_philo))
 	{
-		pthread_mutex_lock(&(phi->meal_time));
+		pthread_mutex_lock(&(dt->philo[i].meal_time));
 		ft_get_time(&cur_time);
-		time_stamp = ft_get_time_diff(&cur_time, phi->time_last_meal);
-		if ((time_stamp) > tmp->data->time_to_die)
+		time_stamp = ft_get_time_diff(&cur_time, dt->philo[i].time_last_meal);
+		if (time_stamp > dt->time_to_die)
 		{
-			ft_death(tmp->data, phi, cur_time, time_stamp);
+			ft_death(dt, &(dt->philo[i]), cur_time, time_stamp);
 			break ;
 		}
-		pthread_mutex_unlock(&(phi->meal_time));
+		pthread_mutex_unlock(&(dt->philo[i].meal_time));
 		usleep(1);
+		if (i == (dt->n_philo - 1))
+			i = -1;
 	}
 	return (NULL);
 }

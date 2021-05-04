@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 16:08:21 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/28 18:47:28 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/03 18:25:28 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct		s_philo_dt
 	char			*name;
 	int				id;
 	pthread_t		thread;
-	pthread_t		death_thread;
 	pthread_mutex_t	left_fork;
 	pthread_mutex_t	*right_fork;
 	struct timeval	*time_last_meal;
@@ -58,6 +57,7 @@ typedef struct		s_prog_dt
 	int				one_is_died;
 	int				is_finish;
 	pthread_t		eats_thread;
+	pthread_t		deaths_thread;
 	pthread_mutex_t output_protection;
 	pthread_mutex_t finish_lock;
 }					t_prog_dt;

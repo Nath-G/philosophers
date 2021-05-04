@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/04/29 10:38:54 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/04 12:12:22 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	ft_init_philo_data(t_prog_dt *data)
 	int i;
 
 	i = 0;
-	while (i < data->n_philo)
+	while (i < data->n_phi)
 	{
 		data->philo[i].id = i + 1;
 		fill_nbr(data->philo[i].id, data->philo[i].name);
@@ -26,7 +26,7 @@ static int	ft_init_philo_data(t_prog_dt *data)
 		i++;
 	}
 	i = 0;
-	while (i < data->n_philo)
+	while (i < data->n_phi)
 	{
 		if ((i % 2))
 			data->philo[i].is_start_sleeping = 1;
@@ -43,7 +43,7 @@ static int	init_data(t_prog_dt *data)
 	data->time_to_die = data->time_to_die * ONE_MLSEC;
 	data->time_to_eat = data->time_to_eat * ONE_MLSEC;
 	data->time_to_sleep = data->time_to_sleep * ONE_MLSEC;
-	if (!(data->queue_forks = malloc(sizeof(sem_t *) * data->n_philo / 2)))
+	if (!(data->queue_forks = malloc(sizeof(sem_t *) * data->n_phi / 2)))
 		return (ft_display_msg(MALLOC_ERROR));
 	return (0);
 }
@@ -53,7 +53,7 @@ int			init_philo(t_prog_dt *data)
 	int i;
 
 	i = -1;
-	while (++i < data->n_philo)
+	while (++i < data->n_phi)
 	{
 		if (!(data->philo[i].name = malloc(sizeof(char) * 10)))
 			return (ft_display_msg(MALLOC_ERROR));
@@ -68,7 +68,7 @@ int			init_philo(t_prog_dt *data)
 	if (init_queue_fork_sem(data))
 		return (ft_display_msg(SEM_ERROR));
 	i = -1;
-	while (++i < data->n_philo)
+	while (++i < data->n_phi)
 		if (init_ml_time_phi_sem("/ml_time", i, data))
 			return (ft_display_msg(SEM_ERROR));
 	return (0);
@@ -80,7 +80,7 @@ int			init_prog(int ac, char **av, t_prog_dt *data)
 		return (ft_display_msg(ARG_NB_ERROR));
 	if (ft_check_argument_format(av))
 		return (ft_display_msg(ARG_FORMAT_ERROR));
-	if (ft_atoi(av[1], &data->n_philo))
+	if (ft_atoi(av[1], &data->n_phi))
 		return (ft_display_msg(ARG_FORMAT_ERROR));
 	if (ft_atoui(av[2], &data->time_to_die))
 		return (ft_display_msg(ARG_INIT_ERROR));
@@ -93,10 +93,10 @@ int			init_prog(int ac, char **av, t_prog_dt *data)
 	if (ac == 6)
 		if (ft_atoi(av[5], &data->n_meals) || data->n_meals < 1)
 			return (ft_display_msg(ARG_VALUE_ERROR));
-	if (data->n_philo < 2)
+	if (data->n_phi < 2)
 		return (ft_display_msg(ARG_VALUE_ERROR));
 	if (!(data->philo = (t_philo_dt *)malloc(sizeof(t_philo_dt) *
-			(data->n_philo))))
+			(data->n_phi))))
 		return (ft_display_msg(MALLOC_ERROR));
 	if (init_data_sem(data))
 		return (ft_display_msg(SEM_ERROR));

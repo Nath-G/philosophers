@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/05/03 11:21:48 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/03 18:24:42 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ static void	philo_killer(t_prog_dt *data)
 	nb = data->n_philo;
 	if (data->n_meals != -1)
 		pthread_join(data->eats_thread, NULL);
+	pthread_join(data->deaths_thread, NULL);
 	while (i < nb)
 	{
 		pthread_mutex_lock(&(data->philo[i].meal_time));
-		pthread_join(data->philo[i].death_thread, NULL);
 		pthread_join(data->philo[i].thread, NULL);
 		i++;
 	}
@@ -48,6 +48,8 @@ void		clean_philo(t_prog_dt *data, t_param *param)
 	int	i;
 
 	i = 0;
+	if (data->n_meals != -1)
+		ft_unlock_mutex(data);
 	philo_killer(data);
 	if (param)
 		free(param);
