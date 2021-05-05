@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/05 15:35:58 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/05 16:42:37 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 	i = -1;
 	if (gettimeofday(data->time_start, NULL))
 		return (ft_display_msg(TIME_ERROR));
-	while (++i < data->n_philo && param && data)
+	while (++i < data->n_philo)
 	{
 		param[i].data = data;
 		param[i].philo_dt = &data->philo[i];

@@ -6,7 +6,7 @@ OS 		= $(shell uname)
 CC		= clang
 CFLAGS	= -Wall -Wextra -Werror -I./includes
 RM		= rm -f
-DEBUG	= -g3 -fsanitize
+DEBUG	= -g3 -fsanitize=address
 # SRCS *********************************************************************** #
 
 SRCS	= main.c life_actions.c utils.c utils2.c init.c log.c clean.c \

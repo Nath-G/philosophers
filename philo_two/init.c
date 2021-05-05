@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 16:38:22 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/05 19:13:47 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ static int	init_data(t_prog_dt *data)
 	if (!(data->queue_forks = malloc(sizeof(sem_t *) *
 			(data->n_philo / 2 + 1))))
 		return (ft_display_msg(MALLOC_ERROR));
+	if (!(data->time_start = malloc(sizeof(struct timeval))))
+		return (ft_display_msg(MALLOC_ERROR));
+	data->time_start->tv_sec = 0;
+	data->time_start->tv_usec = 0;
+	data->eats_thread = 0;
+	data->deaths_thread = 0;
 	return (0);
 }
 
@@ -57,18 +63,20 @@ int			init_philo(t_prog_dt *data)
 {
 	int i;
 
-	i = 0;
-	while (i < data->n_philo)
+	i = -1;
+	while (++i < data->n_philo)
 	{
 		if (!(data->philo[i].name = malloc(sizeof(char) * 10)))
 			return (ft_display_msg(MALLOC_ERROR));
 		if (!(data->philo[i].time_last_meal =
 				malloc(sizeof(struct timeval))))
 			return (ft_display_msg(MALLOC_ERROR));
-		i++;
+		data->philo[i].thread = 0;
 	}
-	if (!(data->time_start = malloc(sizeof(struct timeval))))
-		return (ft_display_msg(MALLOC_ERROR));
+	// if (!(data->time_start = malloc(sizeof(struct timeval))))
+	// 	return (ft_display_msg(MALLOC_ERROR));
+	// data->time_start->tv_sec = 0;
+	// data->time_start->tv_usec = 0;
 	if (ft_init_philo_data(data))
 		return (ft_display_msg(DATA_INIT_ERROR));
 	return (0);

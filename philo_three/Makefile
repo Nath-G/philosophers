@@ -5,7 +5,7 @@ NAME	= philo_three
 CC		= clang
 CFLAGS	= -Wall -Wextra -Werror -I./includes
 RM		= rm -f
-DEBUG	= -g3 -fsanitize
+DEBUG	= -g3 -fsanitize=address
 
 # SRCS *********************************************************************** #
 

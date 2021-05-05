@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 16:30:36 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 12:12:32 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/05 20:07:12 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,6 @@ int					ft_atoui(char *str, unsigned int *nb);
 int					ft_atoi(char *str, int *nb);
 void				fill_nbr(int nbr, char *ptr);
 void				fill_lunbr(long unsigned nbr, char *ptr);
-char				*ft_strjoinfree(char *s1, const char *s2);
 char				*ft_sem_name(char *sem_name, char *phi_name);
 
 #endif

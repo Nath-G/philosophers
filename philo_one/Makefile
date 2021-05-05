@@ -5,7 +5,7 @@ NAME	= philo_one
 OS 		= $(shell uname)
 CC		= clang
 CFLAGS	= -Wall -Wextra -Werror -I./includes
-DEBUG = -g3 -fsanitize
+DEBUG = -g3 -fsanitize=address
 RM		= rm -f
 
 # SRCS *********************************************************************** #

@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 16:40:04 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/05 18:12:10 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ static int	init_data(t_prog_dt *data)
 	data->time_to_sleep = data->time_to_sleep * ONE_MLSEC;
 	if (!(data->queue_forks = malloc(sizeof(sem_t *) * data->n_phi / 2)))
 		return (ft_display_msg(MALLOC_ERROR));
+	if (!(data->time_start = malloc(sizeof(struct timeval))))
+		return (ft_display_msg(MALLOC_ERROR));
+	data->time_start->tv_sec = 0;
+	data->time_start->tv_usec = 0;
+	data->eats_thread = 0;
 	return (0);
 }
 
@@ -58,9 +63,10 @@ int			init_philo(t_prog_dt *data)
 		if (!(data->philo[i].time_last_meal =
 				malloc(sizeof(struct timeval))))
 			return (ft_display_msg(MALLOC_ERROR));
+		data->philo[i].death_thread = 0;
 	}
-	if (!(data->time_start = malloc(sizeof(struct timeval))))
-		return (ft_display_msg(MALLOC_ERROR));
+	// if (!(data->time_start = malloc(sizeof(struct timeval))))
+	// 	return (ft_display_msg(MALLOC_ERROR));
 	if (ft_init_philo_data(data))
 		return (ft_display_msg(DATA_INIT_ERROR));
 	if (init_queue_fork_sem(data))

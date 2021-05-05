@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:18:35 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 12:12:27 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/05 16:41:25 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	launch_philo(t_prog_dt *data, t_param *param)
 		return (ft_display_msg(TIME_ERROR));
 	i = 0;
 	param->data = data;
-	while (i < data->n_phi && param && data && !data->is_finish)
+	while (i < data->n_phi && !data->is_finish)
 	{
 		param->philo = &(data->philo[i]);
 		if (ft_get_time(param->philo->time_last_meal))
