@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_data.c                                        :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 15:41:15 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/05 17:35:02 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ static int	ft_init_philo_data(t_prog_dt *data)
 {
 	int i;
 
-	i = 0;
-	while (i < data->n_philo)
+	i = -1;
+	data->philo[0].right_fork = &data->philo[i - 1].left_fork;
+	while (++i < data->n_philo)
 	{
 		if (i != 0)
 			data->philo[i].right_fork = &data->philo[i - 1].left_fork;
@@ -27,16 +28,12 @@ static int	ft_init_philo_data(t_prog_dt *data)
 		data->philo[i].is_start_sleeping = 0;
 		data->philo[i].time_last_meal->tv_sec = 0;
 		data->philo[i].time_last_meal->tv_usec = 0;
-		i++;
+		data->philo[i].thread = 0;
 	}
-	data->philo[0].right_fork = &data->philo[i - 1].left_fork;
-	i = 0;
-	while (i < data->n_philo)
-	{
+	i = -1;
+	while (++i < data->n_philo)
 		if ((i % 2))
 			data->philo[i].is_start_sleeping = 1;
-		i++;
-	}
 	return (0);
 }
 
@@ -58,6 +55,8 @@ static int	init_data(t_prog_dt *data)
 	data->time_to_die = data->time_to_die * ONE_MLSEC;
 	data->time_to_eat = data->time_to_eat * ONE_MLSEC;
 	data->time_to_sleep = data->time_to_sleep * ONE_MLSEC;
+	data->eats_thread = 0;
+	data->deaths_thread = 0;
 	return (0);
 }
 
@@ -65,8 +64,8 @@ int			init_philo(t_prog_dt *data)
 {
 	int i;
 
-	i = 0;
-	while (i < data->n_philo)
+	i = -1;
+	while (++i < data->n_philo)
 	{
 		if (!(data->philo[i].name = malloc(sizeof(char) * 10)))
 			return (ft_display_msg(MALLOC_ERROR));
@@ -80,10 +79,11 @@ int			init_philo(t_prog_dt *data)
 		if (pthread_mutex_init(&data->philo[i].meal_time, NULL))
 			return (ft_display_msg(MUTEX_ERROR));
 		pthread_mutex_lock(&data->philo[i].finish_eaten);
-		i++;
 	}
 	if (!(data->time_start = malloc(sizeof(struct timeval))))
 		return (ft_display_msg(MALLOC_ERROR));
+	data->time_start->tv_sec = 0;
+	data->time_start->tv_usec = 0;
 	if (ft_init_philo_data(data))
 		return (ft_display_msg(DATA_INIT_ERROR));
 	return (0);
