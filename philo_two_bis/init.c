@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/03 12:09:31 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/26 14:02:21 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,6 @@ static int	ft_init_philo_data(t_prog_dt *data)
 			data->philo[i].is_start_sleeping = 1;
 		i++;
 	}
-	if (init_queue_fork_sem(data))
-		return (ft_display_msg(SEM_ERROR));
-	i = -1;
-	while (++i < data->n_philo)
-		if (init_ml_time_phi_sem("/ml_time", i, data))
-			return (ft_display_msg(SEM_ERROR));
 	return (0);
 }
 
@@ -49,7 +43,7 @@ static int	init_data(t_prog_dt *data)
 	data->time_to_die = data->time_to_die * ONE_MLSEC;
 	data->time_to_eat = data->time_to_eat * ONE_MLSEC;
 	data->time_to_sleep = data->time_to_sleep * ONE_MLSEC;
-	if (!(data->queue_forks = malloc(sizeof(sem_t *) * (data->n_philo / 2 + 1))))
+	if (!(data->queue_forks = malloc(sizeof(sem_t *) * data->n_philo / 2)))
 		return (ft_display_msg(MALLOC_ERROR));
 	return (0);
 }

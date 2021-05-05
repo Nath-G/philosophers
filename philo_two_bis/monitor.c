@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/03 11:33:41 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/27 16:17:29 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static int	ft_death(t_prog_dt *dt, t_philo_dt *phi, struct timeval cur_time,
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 	ft_display_log((time_stamp / ONE_MLSEC), phi->name, " died\n",
 		dt);
-	//sem_wait(dt->log_lock);
 	dt->is_finish = 1;
 	sem_post(dt->end_lock);
 	return (0);
@@ -51,37 +50,27 @@ void		*eats_checker(void *data_philo)
 	return (NULL);
 }
 
-void		*death_checker(void *data)
+void		*death_checker(void *param)
 {
 	unsigned long int	time_stamp;
 	struct timeval		cur_time;
-	t_prog_dt			*dt;
+	t_param				*tmp;
 	t_philo_dt			*phi;
-	int					i;
-	
-	dt = (t_prog_dt *)data;
 
-	phi = dt->philo;
-	i= -1;		
-	while (!dt->is_finish && (++i < dt->n_philo))
+	tmp = (t_param *)param;
+	phi = tmp->philo_dt;
+	while (!tmp->data->is_finish)
 	{
-	//	printf("in monitor phi %s i = %d\n", dt->philo[i], i);
-		while(!phi[i].time_last_meal)
-			i++;
-		// sem_wait(phi[i].meal_time);
-		// ft_get_time(&cur_time);
-		sem_wait(phi[i].meal_time);
+		sem_wait(phi->meal_time);
 		ft_get_time(&cur_time);
-	//	time_stamp = ft_get_time_diff(&cur_time, phi[i].time_last_meal);
-		if ((time_stamp = ft_get_time_diff(&cur_time, phi[i].time_last_meal)) > dt->time_to_die)
+		time_stamp = ft_get_time_diff(&cur_time, phi->time_last_meal);
+		if ((time_stamp) > tmp->data->time_to_die)
 		{
-			ft_death(dt, &phi[i], cur_time, time_stamp);
+			ft_death(tmp->data, phi, cur_time, time_stamp);
 			break ;
 		}
-		sem_post(phi[i].meal_time);
+		sem_post(phi->meal_time);
 		usleep(1);
-		if (i == (dt->n_philo - 1))
-			i = -1;
 	}
 	return (NULL);
 }

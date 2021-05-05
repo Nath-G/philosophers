@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:01:20 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/03 11:48:24 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/04/26 10:25:02 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,21 +78,4 @@ char	*ft_sem_name(char *sem_name, char *phi_name)
 	}
 	name[i + j] = '\0';
 	return (name);
-}
-
-int ft_usleep(int *is_finish, unsigned int time)
-{
-	unsigned int time_conv;
-	unsigned int i;
-	
-	i = 0;
-	time_conv = time / 500;
-	printf("ok\n");
-	while(!(*is_finish) && (i < time_conv))
-	{
-		usleep(500);
-		i++;
-	}
-	printf("sort ok\n");
-	return (0);
 }
