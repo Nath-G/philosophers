@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 11:18:40 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 11:03:07 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/06 12:29:27 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static int	ft_death(t_prog_dt *dt, t_philo_dt *phi, struct timeval cur_time,
 	ft_display_log((time_stamp / ONE_MLSEC), phi->name, " died\n",
 		dt);
 	dt->is_finish = 1;
-	sem_wait(dt->log_lock);
 	sem_post(dt->end_lock);
 	return (0);
 }
@@ -45,7 +44,6 @@ void		*eats_checker(void *data_philo)
 			ft_display_log((time_stamp / ONE_MLSEC), "all philos",
 				" have eaten\n", data);
 			data->is_finish = 1;
-			sem_wait(data->log_lock);
 			sem_post(data->end_lock);
 		}
 	}

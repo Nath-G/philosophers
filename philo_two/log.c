@@ -6,13 +6,21 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 17:58:49 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/03 15:25:41 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/06 13:06:56 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int		ft_display_msg(int msg_nb)
+static void	ft_write_log(char *time_stamp, char *philo_name, char *msg)
+{
+	write(1, time_stamp, ft_strlen(time_stamp));
+	write(1, " ", 1);
+	write(1, philo_name, ft_strlen(philo_name));
+	write(1, msg, ft_strlen(msg));
+}
+
+int			ft_display_msg(int msg_nb)
 {
 	if (msg_nb == ARG_NB_ERROR)
 		return (ft_write_msg("Error : wrong argument number!\n", msg_nb));
@@ -35,8 +43,8 @@ int		ft_display_msg(int msg_nb)
 	return (0);
 }
 
-void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
-		t_prog_dt *data)
+void		ft_display_log(long unsigned time_stamp, char *philo_name,
+			char *msg, t_prog_dt *data)
 {
 	int				i;
 	char			*ptr;
@@ -55,12 +63,8 @@ void	ft_display_log(long unsigned time_stamp, char *philo_name, char *msg,
 	fill_lunbr(time_stamp, ptr);
 	sem_wait(data->log_lock);
 	if (!data->is_finish)
-	{
-		write(1, ptr, ft_strlen(ptr));
-		write(1, " ", 1);
-		write(1, philo_name, ft_strlen(philo_name));
-		write(1, msg, ft_strlen(msg));
-	}
+		ft_write_log(ptr, philo_name, msg);
+	if (!(msg[1] == 'd') && !(msg[3] == 'v'))
+		sem_post(data->log_lock);
 	free(ptr);
-	sem_post(data->log_lock);
 }
