@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/19 16:10:30 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 12:05:29 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/06 11:30:00 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	init_queue_fork_sem(t_prog_dt *data)
 	int	i;
 
 	i = 0;
-	while (i < (data->n_philo / 2 + 1))
+	while (i < (data->n_philo / 2))
 	{
 		sem_unlink(ft_sem_name("/queue_f", data->philo[i].name));
 		data->queue_forks[i] = sem_open(ft_sem_name("/queue_f",
