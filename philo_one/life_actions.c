@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 12:27:33 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/04 16:34:18 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/06 10:40:14 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			philo_eats(t_philo_dt *phi, t_prog_dt *dt)
 	time_stamp = ft_get_time_diff(&cur_time, dt->time_start);
 	ft_display_log((time_stamp / ONE_MLSEC), phi->name,
 		" is eating\n", dt);
-	usleep(dt->time_to_eat);
+	ft_usleep(dt, dt->time_to_eat);
 	phi->meals_ate++;
 	if (phi->meals_ate == dt->n_meals)
 		pthread_mutex_unlock(&phi->finish_eaten);
@@ -61,7 +61,7 @@ int			philo_sleeps(t_philo_dt *phi, t_prog_dt *dt)
 	{
 		ft_display_log((time_stamp / ONE_MLSEC), phi->name,
 			" is sleeping\n", dt);
-		usleep(dt->time_to_sleep);
+		ft_usleep(dt, dt->time_to_sleep);
 	}
 	return (0);
 }
