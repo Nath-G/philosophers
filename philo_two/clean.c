@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 15:39:18 by nagresl           #+#    #+#             */
-/*   Updated: 2021/05/06 13:07:11 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/06 14:23:20 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		ft_post_sem(t_prog_dt *dt)
 	int i;
 
 	i = -1;
-	while (++i < dt->n_philo)
+	while (++i < (dt->n_philo / 2))
 		sem_post(dt->fork);
 	if (dt->n_meals != -1)
 	{
