@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 18:01:48 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/05 18:12:10 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/06 13:34:58 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	init_data(t_prog_dt *data)
 	data->time_to_die = data->time_to_die * ONE_MLSEC;
 	data->time_to_eat = data->time_to_eat * ONE_MLSEC;
 	data->time_to_sleep = data->time_to_sleep * ONE_MLSEC;
-	if (!(data->queue_forks = malloc(sizeof(sem_t *) * data->n_phi / 2)))
+	if (!(data->queue_forks = malloc(sizeof(sem_t *) * (data->n_phi / 2))))
 		return (ft_display_msg(MALLOC_ERROR));
 	if (!(data->time_start = malloc(sizeof(struct timeval))))
 		return (ft_display_msg(MALLOC_ERROR));
@@ -65,8 +65,6 @@ int			init_philo(t_prog_dt *data)
 			return (ft_display_msg(MALLOC_ERROR));
 		data->philo[i].death_thread = 0;
 	}
-	// if (!(data->time_start = malloc(sizeof(struct timeval))))
-	// 	return (ft_display_msg(MALLOC_ERROR));
 	if (ft_init_philo_data(data))
 		return (ft_display_msg(DATA_INIT_ERROR));
 	if (init_queue_fork_sem(data))
