@@ -6,7 +6,7 @@
 /*   By: nagresel <nagresel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 15:01:20 by nagresel          #+#    #+#             */
-/*   Updated: 2021/05/06 10:39:23 by nagresel         ###   ########.fr       */
+/*   Updated: 2021/05/06 10:46:09 by nagresel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,4 @@ void	fill_nbr(int nbr, char *ptr)
 		ptr++;
 	}
 	*ptr = '\0';
-}
-
-int		ft_usleep(t_prog_dt *dt, unsigned int time)
-{
-	unsigned int	time_conv;
-	unsigned int	i;
-
-	time_conv = time / 500;
-	i = -1;
-	while (!dt->is_finish && (++i < time_conv))
-		usleep(500);
-	return (0);
 }
