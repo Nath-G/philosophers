@@ -15,4 +15,6 @@ puis exécuter les commandes sous les répertoires respectifs :
 ```run```
 - en cas de problème, taper :
 ```backtrace```
-```valgrind --leak-check=yes ./philo_one 3 5000 300 300 4```
+
+### Lancer avec valgrind :
+```valgrind --leak-check=yes ./philo_one 3 500 300 300 4```
