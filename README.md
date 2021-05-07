@@ -11,8 +11,8 @@ puis exécuter les commandes sous les répertoires respectifs :
 - mettre -g3 dans les flags du make file
 - compiler
 - executer avec la cmd suivante :
-```gdb --args ./philo_one 3 5000 300 300 4```
-```run```
+- ```gdb --args ./philo_one 3 650 300 300 4```
+- puis : ```run```
 - en cas de problème, taper :
 ```backtrace```
 
