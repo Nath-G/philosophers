@@ -10,14 +10,14 @@ DEBUG	= -g3 -fsanitize=address
 # SRCS *********************************************************************** #
 
 SRCS	= main.c life_actions.c utils.c utils2.c init.c log.c clean.c \
-		  monitor.c time.c init_semaphores.c
+			monitor.c time.c init_semaphores.c
 
 # OBJS *********************************************************************** #
 
-OBJS	=	${SRCS:.c=.o}
+OBJS	= ${SRCS:.c=.o}
 
 # RULES ********************************************************************** #
- .c.o:
+.c.o:
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	${OBJS}

@@ -2,16 +2,15 @@
 # NAME - COMPLIATOR - FLAGGS -LIBFT ****************************************** #
 
 NAME	= philo_one
-OS 		= $(shell uname)
 CC		= clang
 CFLAGS	= -Wall -Wextra -Werror -I./includes
-DEBUG = -g3 -fsanitize=address
 RM		= rm -f
+DEBUG	= -g3 -fsanitize=address
 
 # SRCS *********************************************************************** #
 
 SRCS	= main.c life_actions.c utils.c utils2.c init.c log.c clean.c \
-				  monitor.c time.c
+			monitor.c time.c
 
 # OBJS *********************************************************************** #
 

@@ -1,4 +1,11 @@
 # philosophers
+Projet 42 multi threading (tourne sous VM - Linux Ubuntu)
+
+### Compiler
+puis exécuter les commandes sous les répertoires respectifs :
+- ./philo_one 5 800 200 200 [10] (nb de philo, time to die, time to eat, time to sleep, [nb de repas par philo])
+- ./philo_two 5 800 200 200 [10]
+- ./philo_three 5 800 200 200 [10]
 
 ### compiler avec gdb :
 - mettre -g3 dans les flags du make file
@@ -9,5 +16,3 @@
 - en cas de problème, taper :
 ```backtrace```
 ```valgrind --leak-check=yes ./philo_one 3 5000 300 300 4```
-
-usleep( 5 * ((phi->id + 1) % 2));
