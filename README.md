@@ -7,7 +7,7 @@ puis exécuter les commandes sous les répertoires respectifs :
 - ./philo_two 5 800 200 200 [10]
 - ./philo_three 5 800 200 200 [10]
 
-### compiler avec gdb :
+### Compiler avec gdb :
 - mettre -g3 dans les flags du make file
 - compiler
 - executer avec la cmd suivante :
